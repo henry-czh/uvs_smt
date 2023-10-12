@@ -1,6 +1,3 @@
 __pycache__
 *.pyc
 *.swp
-pyinstaller/build
-pyinstaller/dist
-pyinstaller/main.spec
