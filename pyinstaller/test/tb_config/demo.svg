@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- 由 Microsoft Visio, SVG Export 生成 demo.svg Page-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="11.6929in" height="8.26772in"
+		viewBox="0 0 841.89 595.276" xml:space="preserve" color-interpolation-filters="sRGB" class="st3">
+	<v:documentProperties v:langID="2052" v:metric="true" v:viewMarkup="false">
+		<v:userDefs>
+			<v:ud v:nameU="msvSubprocessMaster" v:prompt="" v:val="VT4(Rectangle)"/>
+			<v:ud v:nameU="msvNoAutoConnect" v:val="VT0(1):26"/>
+		</v:userDefs>
+	</v:documentProperties>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:url(#grad0-4);stroke:#386288;stroke-width:0.75}
+		.st2 {fill:#386288;font-family:Calibri;font-size:0.833336em}
+		.st3 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<defs id="Patterns_And_Gradients">
+		<linearGradient id="grad0-4" x1="0" y1="0" x2="1" y2="0" gradientTransform="rotate(60 0.5 0.5)">
+			<stop offset="0" stop-color="#e8ebef" stop-opacity="1"/>
+			<stop offset="0.24" stop-color="#f4f5f7" stop-opacity="1"/>
+			<stop offset="0.54" stop-color="#feffff" stop-opacity="1"/>
+		</linearGradient>
+	</defs>
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<v:userDefs>
+			<v:ud v:nameU="msvThemeOrder" v:val="VT0(0):26"/>
+		</v:userDefs>
+		<title>页-1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<g id="shape1-1" v:mID="1" v:groupContext="shape" transform="translate(77.9528,-419.528)">
+			<title>正方形</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<rect x="0" y="457.795" width="137.48" height="137.48" class="st1"/>
+		</g>
+		<a xlink:href="unit_SKT0_HM0" xlink:title="test.hm">
+			<g id="shape2-5" v:mID="2" v:groupContext="shape" transform="translate(45.3543,-419.528)">
+				<title>矩形</title>
+				<desc>HM</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="12.7559" cy="526.535" width="25.52" height="137.48"/>
+				<rect x="0" y="457.795" width="25.5118" height="137.48" class="st1"/>
+				<text x="5.37" y="529.54" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>HM</text>			</g>
+		</a>
+		<a xlink:href="unit_SKT0_CLS1" xlink:title="test.cls1">
+			<g id="shape8-9" v:mID="8" v:groupContext="shape" transform="translate(114.094,-442.205)">
+				<title>矩形.8</title>
+				<desc>CLS1</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="33.3071" cy="576.496" width="66.62" height="37.5591"/>
+				<rect x="0" y="557.717" width="66.6142" height="37.5591" class="st1"/>
+				<text x="23.71" y="573.5" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>CLS1<v:lf/></text>			</g>
+		</a>
+		<a xlink:href="unit_SKT0_CLS1_CORE0" xlink:title="test.cls1.core0">
+			<g id="shape9-13" v:mID="9" v:groupContext="shape" transform="translate(120.472,-446.457)">
+				<title>正方形.9</title>
+				<desc>C</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="6.37795" cy="588.898" width="12.76" height="12.7559"/>
+				<rect x="0" y="582.52" width="12.7559" height="12.7559" class="st1"/>
+				<text x="4" y="591.9" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>C</text>			</g>
+		</a>
+		<a xlink:href="unit_SKT0_CLS1_CORE2" xlink:title="test.cls1.core2">
+			<g id="shape10-17" v:mID="10" v:groupContext="shape" transform="translate(148.819,-446.457)">
+				<title>正方形.10</title>
+				<desc>C</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="6.37795" cy="588.898" width="12.76" height="12.7559"/>
+				<rect x="0" y="582.52" width="12.7559" height="12.7559" class="st1"/>
+				<text x="4" y="591.9" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>C</text>			</g>
+		</a>
+		<a xlink:href="unit_SKT0_CLS1_CORE1" xlink:title="test.cls1.core1">
+			<g id="shape11-21" v:mID="11" v:groupContext="shape" transform="translate(134.646,-446.457)">
+				<title>正方形.11</title>
+				<desc>C</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="6.37795" cy="588.898" width="12.76" height="12.7559"/>
+				<rect x="0" y="582.52" width="12.7559" height="12.7559" class="st1"/>
+				<text x="4" y="591.9" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>C</text>			</g>
+		</a>
+		<a xlink:href="unit_SKT0_CLS1_CORE3" xlink:title="test.cls1.core3">
+			<g id="shape12-25" v:mID="12" v:groupContext="shape" transform="translate(162.992,-446.457)">
+				<title>正方形.12</title>
+				<desc>C</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="6.37795" cy="588.898" width="12.76" height="12.7559"/>
+				<rect x="0" y="582.52" width="12.7559" height="12.7559" class="st1"/>
+				<text x="4" y="591.9" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>C</text>			</g>
+		</a>
+		<a xlink:href="unit_SKT0_CLS0" xlink:title="test.cls0">
+			<g id="shape13-29" v:mID="13" v:groupContext="shape" transform="translate(114.094,-496.772)">
+				<title>矩形.13</title>
+				<desc>CLS0</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="33.3071" cy="576.496" width="66.62" height="37.5591"/>
+				<rect x="0" y="557.717" width="66.6142" height="37.5591" class="st1"/>
+				<text x="23.71" y="573.5" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>CLS0<v:lf/></text>			</g>
+		</a>
+		<a xlink:href="unit_SKT0_CLS0_CORE0" xlink:title="test.cls0.core0">
+			<g id="shape14-33" v:mID="14" v:groupContext="shape" transform="translate(120.472,-501.024)">
+				<title>正方形.14</title>
+				<desc>C</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="6.37795" cy="588.898" width="12.76" height="12.7559"/>
+				<rect x="0" y="582.52" width="12.7559" height="12.7559" class="st1"/>
+				<text x="4" y="591.9" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>C</text>			</g>
+		</a>
+		<a xlink:href="unit_SKT0_CLS0_CORE2" xlink:title="test.cls0.core2">
+			<g id="shape15-37" v:mID="15" v:groupContext="shape" transform="translate(148.819,-501.024)">
+				<title>正方形.15</title>
+				<desc>C</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="6.37795" cy="588.898" width="12.76" height="12.7559"/>
+				<rect x="0" y="582.52" width="12.7559" height="12.7559" class="st1"/>
+				<text x="4" y="591.9" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>C</text>			</g>
+		</a>
+		<a xlink:href="unit_SKT0_CLS0_CORE1" xlink:title="test.cls0.core1">
+			<g id="shape16-41" v:mID="16" v:groupContext="shape" transform="translate(134.646,-501.024)">
+				<title>正方形.16</title>
+				<desc>C</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="6.37795" cy="588.898" width="12.76" height="12.7559"/>
+				<rect x="0" y="582.52" width="12.7559" height="12.7559" class="st1"/>
+				<text x="4" y="591.9" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>C</text>			</g>
+		</a>
+		<a xlink:href="unit_SKT0_CLS0_CORE3" xlink:title="test.cls0.core3">
+			<g id="shape17-45" v:mID="17" v:groupContext="shape" transform="translate(162.992,-501.024)">
+				<title>正方形.17</title>
+				<desc>C</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="6.37795" cy="588.898" width="12.76" height="12.7559"/>
+				<rect x="0" y="582.52" width="12.7559" height="12.7559" class="st1"/>
+				<text x="4" y="591.9" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>C</text>			</g>
+		</a>
+		<a xlink:href="unit_SKT0" xlink:title="skt0">
+			<g id="shape18-49" v:mID="18" v:groupContext="shape" transform="translate(259.37,-472.677)">
+				<title>正方形.18</title>
+				<desc>SKT0</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="20.5512" cy="574.724" width="41.11" height="41.1024"/>
+				<rect x="0" y="554.173" width="41.1024" height="41.1024" class="st1"/>
+				<text x="10.69" y="577.72" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>SKT0</text>			</g>
+		</a>
+		<a xlink:href="unit_SKT1" xlink:title="skt1">
+			<g id="shape20-53" v:mID="20" v:groupContext="shape" transform="translate(304.724,-472.677)">
+				<title>正方形.20</title>
+				<desc>SKT1</desc>
+				<v:userDefs>
+					<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+				</v:userDefs>
+				<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+				<v:textRect cx="20.5512" cy="574.724" width="41.11" height="41.1024"/>
+				<rect x="0" y="554.173" width="41.1024" height="41.1024" class="st1"/>
+				<text x="10.69" y="577.72" class="st2" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>SKT1</text>			</g>
+		</a>
+	</g>
+</svg>

@@ -1,0 +1,10 @@
+// 以下为SMT自动生成内容, 遵循diag语法规则, 可以自行编辑该文件.
+
+testcase0 path=hello_world config=111 scp= comp_argvs='+define+SRAM_SIM +define+STANDCELL +define+SCP_ROM_SIM' run_argvs='' run_boards='0,1,2,3' argv='+define+TIMEOUT=50000' 
+
+testcase2 path=hello_world config=113 scp= comp_argvs='+define+I2C_TEST' run_argvs='' run_boards='0,1,2,3' argv='+define+TIMEOUT=50000' 
+
+testcase3 path=hello_world config=114 scp= comp_argvs='' run_argvs='' run_boards='0,1,2,3' argv='+define+TIMEOUT=50000' 
+
+testcase5 path=hello_world config=115 scp= comp_argvs='' run_argvs='' run_boards='0,1,2,3' argv='+define+TIMEOUT=50000' 
+

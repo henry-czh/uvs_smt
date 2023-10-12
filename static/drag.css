@@ -1,0 +1,47 @@
+.window {
+    position: fixed;
+    width: 800px;
+    height: 670px;
+    bottom: 70px;
+    right: 40px;
+    font-size: 12px;
+    background-color: #FFF;
+    border: 1px solid #292961;
+    -webkit-box-shadow: 10px 10px 25px #ccc;
+    -moz-box-shadow: 10px 10px 25px #ccc;
+    box-shadow: 10px 10px 25px #ccc;
+
+    /* resize: both; */
+    overflow: auto;
+    z-index: 1;
+    display: none;
+}
+.title {
+    cursor: move;
+    height: 20px;
+    font-weight: bold;
+    color: #d1d1f0;
+    background-color: #292961;
+    padding: 6px 0px 2px 10px;
+}
+.window>fieldset {
+    height: calc(100% - 45px);
+    overflow: auto;
+}
+.config_tr fieldset {
+    overflow: auto;
+}
+.window textarea {
+    width: 100%;
+    border: none;
+    resize: none;
+}
+.window select {
+    width: 169px;
+}
+.window input {
+    width: 147px;
+}
+.window ul {
+    padding-inline-start: 0;
+}

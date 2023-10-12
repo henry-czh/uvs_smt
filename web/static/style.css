@@ -1,0 +1,282 @@
+* {
+    font-family: monospace;
+}
+html, body {
+    height: 100%;
+    min-width: 1720px;
+    background: #f2f2f2;
+}
+.hide {
+    display: none;
+}
+.show {
+    display: block;
+}
+body {
+    margin: 0;
+    padding: 0px;
+}
+fieldset {
+    border: #8f8f8f solid 1px;
+}
+.config-tb {
+    margin: auto;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+.config-tb td, .config-tb th {
+    width: 30%;
+    padding: 3px;
+    vertical-align: top;
+}
+.head-tr {
+    position: fixed;
+    width: 100%;
+    padding: 3px 0;
+    z-index: 9;
+    min-width: 1200px;
+    background-color: #292961;
+    background-image: url(cbs-m.png);
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: 80px;
+}
+.head-tr * {
+    color: #d1d1f0;
+    border: none;
+    border-radius: 4px;
+}
+.head-tr input {
+    color: #292961
+}
+.head-tr span, .head-tr label {
+    font-weight: bold;
+}
+.head-tr select, .head-tr button {
+    color: #292961
+}
+li {
+    padding: 2px;
+    white-space: nowrap;
+}
+select {
+    font-size: 13px;
+    border: #696969 solid 1px;
+    padding: 5px 5px;
+    background: white;
+}
+button, input {
+    padding: 5px 10px;
+    border: black solid 1px;
+}
+button {
+    background: antiquewhite;
+}
+button:hover, input[type=file]:hover {
+    background: white;
+    cursor: pointer;
+}
+input[type=file] {
+    padding: 0;
+    background: white;
+}
+pre {
+    margin: 10px;
+    line-height: 1.5rem;
+}
+ul {
+    display: none;
+    margin: 0;
+    padding-inline-start: 20px;
+    list-style-type: none;
+}
+i {
+    color: red;
+    font-style: normal;
+}
+i[warning] {
+    color: orange;
+}
+i[success] {
+    color: green;
+}
+#first-ul, #second-ul {
+    display: block;
+    font-size: 12px;
+}
+.window legend {
+    cursor: cell;
+}
+.config_tr span {
+    width: 120px;
+    display: inline-table;
+}
+.menu span {
+    width: 140px;
+    display: inline-table;
+}
+.long-select span {
+    width: 200px;
+}
+.caret {
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none;
+}
+.config_tr span::before {
+  content: "\25A2";
+  margin-right: 6px;
+}
+.config_tr .caret::before {
+  content: "\25B6";
+  display: inline-block;
+  margin-right: 6px;
+}
+.config_tr .caret-down::before {
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Safari */
+  transform: rotate(90deg);  
+}
+.config_tr fieldset {
+    margin: 0;
+    overflow-y: auto;
+    display: table-cell;
+}
+.config_table fieldset {
+    height: 600px;
+}
+.pre-fieldset {
+    margin-bottom: 10px;
+}
+.config_tr .CompileOption {
+    height: 95px;
+    overflow-y: hidden;
+}
+#CompileOption {
+    width: 100%;
+    border: none;
+    resize: none;
+}
+#mode_select {
+    position: inherit;
+}
+section {
+    display: none;
+    background: rgba(0,0,0,.35);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+section div {
+    background: white;
+    width: 420px;
+    margin: auto;
+    margin-top: 90px;
+    max-height: 60%;
+    min-height: 300px;
+    overflow-y: scroll;
+}
+section h4 {
+    text-align: center;
+    margin-top: 30px;
+}
+section li {
+    line-height: 3em;
+}
+section span {
+    width: 250px;
+    display: inline-table;
+}
+section select {
+    min-width: 100px;
+}
+section button {
+    margin: auto;
+    display: block;
+    margin-bottom: 25px;
+}
+#logo {
+    position: fixed;
+    height: 40px;
+    top: 0;
+}
+#color {
+    float: left;
+    margin-top: 225px;
+    margin-left: 20px;
+}
+svg {background-color: #f2f2f2;user-select: none;}
+[data-config][data-value]>g>rect{fill:#4d4d4d;}
+[data-config][data-value="N"]>g>rect{fill:#ffffff;}
+[data-config][data-value="D"]>g>rect{fill:#ffce38;}
+[data-config][data-value="G"]>g>rect{fill:#ac71d8;}
+[data-config][data-value="V"]>g>rect{fill:#3dcbff;}
+[data-config][data-value="S"]>g>rect{fill:#92d050;}
+[data-config][data-value="S1"]>g>rect{fill:red;}
+[data-config][data-value="S2"]>g>rect{fill:orange;}
+[data-config][data-value="S3"]>g>rect{fill:yellow;}
+[data-config][data-value="S4"]>g>rect{fill:lime;}
+/*
+[data-config][data-value="S5"]>g>rect{fill:cyan;}
+[data-config][data-value="S6"]>g>rect{fill:blue;}
+[data-config][data-value="S7"]>g>rect{fill:purple;}
+*/
+[data-config][data-value="U"]>g>rect{fill:cyan;}
+[data-config][data-value="NU"]>g>rect{fill:#000;color:#fff;}
+.menu {
+    border: #8f8f8f solid 1px;
+    position: fixed;
+    background: #f0f0f0;
+    bottom: 0;
+    right: 0px;
+    margin: 0;
+    width: 330px;
+    height: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    padding-top: 10px;
+}
+.menu * {
+    font-size: 11px;
+}
+.menu label {
+    margin-left: -6px;
+}
+.menu fieldset {
+    height: 210px;
+    overflow-y: scroll;
+    display: table-cell;
+}
+.menu td {
+    padding: 4px 8px;
+}
+legend {
+    color: #393982;
+    font-weight: bold;
+}
+.hide-div {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 999;
+}
+.hide-div .hide_win {
+    background: #8f8f8f;
+}
+input[type="checkbox"] {
+    position: absolute;
+    top: 8px;
+}
+input[type="checkbox"]+label {
+    margin-left: 23px;
+    margin-right: 15px;
+}
+label:hover, input[type=checkbox]:hover {
+    cursor: pointer;
+}

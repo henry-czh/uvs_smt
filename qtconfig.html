@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./static/style.css">
+    <link rel="stylesheet" href="./static/drag.css">
+    <script src="./static/jquery-3.0.0.min.js"></script>
+    <script src="./static/angular.min.js"></script>
+    <script src="./static/drag.js"></script>
+    <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <script type="text/javascript" src="./static/script.js"></script>
+</head>
+<body>
+
+<div class="head-tr">
+    <div style="float:left;margin-left:91px;">
+        <!--
+        <span>Mode Select</span>
+        <select id="mode_select" onchange="ChangeMode(this.value)">
+            <option value="defaullt">defaullt</option>
+            <option value="xxx">xxx</option>
+        </select>
+        -->
+        <span style="margin-left:10px;">Socket</span>
+        <select id="socket_select" onchange="ChangeSocket(this.value)">
+            <option value="skt0">skt0</option>
+        </select>
+    </div>
+    <div style="float:right;margin-right:4px;">
+        <input id="fileSave" placeholder="file name" style="width:666px;"/>
+        <button onclick="SaveConfig()">Save</button>
+        <input id="overwrite" type="checkbox"/>
+        <label for="overwrite">Overwrite</label>
+
+        <input style="display:none;" id="fileLoad" type="file" onchange="LoadConfig()"/>
+        <button onclick="fileLoad.click()">Load</button>
+    </div>
+</div>
+
+<table class="config-tb">
+    <tr>
+        <td style="height:30px;">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <img id="color" src="./static/colors.png"/>
+            <div id="svg_div" style="margin-top:50px;display:flex;"></div>
+        </td>
+    </tr>
+    <tr class="config_tr config_table">
+        <td colspan="3">
+            <fieldset>
+                <legend>Design Browser</legend>
+                <div id="DesignDiv"></div>
+            </fieldset>
+        </td>
+        <td colspan="3">
+            <fieldset class="pre-fieldset">
+                <legend>Preview</legend>
+                <pre id="preview"></pre>
+            </fieldset>
+        </td>
+    </tr>
+</table>
+
+<!--
+<div class="window" style="/*width:500px;*/height:495px;z-index:1;display:block;">
+    <div class="title">Console</div>
+    <fieldset id="console-set" style="border:none;">
+        <pre id="console"></pre>
+    </fieldset>
+</div>
+-->
+
+<div class="window" style="z-index:1;">
+    <div class="title">Baremetal Config</div>
+    <fieldset id="BaremetalConfig" class="long-select config_tr">
+        <ul class="show">
+            <li>
+                <span>BootLocation</span>
+                <select></select>
+            </li>
+            <li>
+                <span>BoardInit</span>
+                <select></select>
+            </li>
+        </ul>
+        <fieldset class="CompileOption">
+            <legend>CompileOption</legend>
+            <textarea id="CompileOption">XXX</textarea>
+        </fieldset>
+    </fieldset>
+</div>
+
+<div class="window" style="z-index:1;">
+    <div class="title">Macro Browser</div>
+    <fieldset id="MacroBrowser" class="long-select config_tr" style="border:none;">
+        <div id="MacroDiv"></div>
+    </fieldset>
+</div>
+
+<div class="window" style="z-index:1;">
+    <div class="title">EMU Browser</div>
+    <fieldset id="EMU" class="long-select config_tr" style="border:none;">
+        <div id="EmuDiv"></div>
+    </fieldset>
+</div>
+
+<div class="window" style="z-index:1;">
+    <div class="title">Zebu Browser</div>
+    <fieldset id="ZEBU" class="long-select config_tr" style="border:none;">
+        <div id="ZebuDiv"></div>
+    </fieldset>
+</div>
+
+<div class="window" style="z-index:1;">
+    <div class="title">PLD Browser</div>
+    <fieldset id="PldBrowser" class="long-select config_tr" style="border:none;">
+        <div id="PldDiv"></div>
+    </fieldset>
+</div>
+
+<div class="window" style="z-index:1;">
+    <div class="title">Image Browser</div>
+    <fieldset id="ImageBrowser" class="long-select config_tr" style="border:none;">
+        <div id="ImageDiv"></div>
+    </fieldset>
+</div>
+
+<div class="window" style="z-index:1;">
+    <div class="title">Peripheral Browser</div>
+    <fieldset id="PeripheralBrowser" class="long-select config_tr" style="border:none;">
+        <div id="PeripheralDiv"></div>
+    </fieldset>
+</div>
+
+<div class="window" style="z-index:1;">
+    <div class="title">Checker Browser</div>
+    <fieldset id="CheckerBrowser" class="long-select config_tr" style="border:none;">
+        <div id="CheckerDiv"></div>
+    </fieldset>
+</div>
+
+<div class="window" style="z-index:1;">
+    <div class="title">Monitor Browser</div>
+    <fieldset id="MonitorBrowser" class="long-select config_tr" style="border:none;">
+        <div id="MonitorDiv"></div>
+    </fieldset>
+</div>
+
+<div class="window" style="z-index:1;">
+    <div class="title">Simu Browser</div>
+    <fieldset id="SimuBrowser" class="long-select config_tr" style="border:none;">
+        <div id="SimuDiv"></div>
+    </fieldset>
+</div>
+
+<div class="window" style="z-index:1;">
+    <div class="title">Protium Browser</div>
+    <fieldset id="ProtiumBrowser" class="long-select config_tr" style="border:none;">
+        <div id="ProtiumDiv"></div>
+    </fieldset>
+</div>
+
+<div class="hide-div">
+    <button class="hide_win" onclick="ShowHideWindow(this,0)">Baremetal</button>
+    <button class="hide_win" onclick="ShowHideWindow(this,1)">Macro</button>
+    <button class="hide_win" onclick="ShowHideWindow(this,2)">EMU</button>
+    <button class="hide_win" onclick="ShowHideWindow(this,3)">ZEBU</button>
+    <button class="hide_win" onclick="ShowHideWindow(this,4)">PLD</button>
+    <button class="hide_win" onclick="ShowHideWindow(this,5)">Image</button>
+    <button class="hide_win" onclick="ShowHideWindow(this,6)">Peripheral</button>
+    <button class="hide_win" onclick="ShowHideWindow(this,7)">Checker</button>
+    <button class="hide_win" onclick="ShowHideWindow(this,8)">Monitor</button>
+    <button class="hide_win" onclick="ShowHideWindow(this,9)">SIMU</button>
+    <button class="hide_win" onclick="ShowHideWindow(this,10)">Protium</button>
+    <!--
+    <button onclick="ShowHideWindow(this,0)">Console</button>
+    -->
+</div>
+
+<section ng-app="myApp" ng-controller="myCtrl">
+    <div>
+        <h4>Multiple Depend</h4>
+        <ul id="second-ul">
+        </ul>
+        <button onclick="MultipleSubmit()">Submit</button>
+    </div>
+</section>
+
+<!--
+<script src="./static/jquery-3.0.0.min.js"></script>
+<script src="./static/angular.min.js"></script>
+<script src="./static/my_tool.js"></script>
+<script src="./static/config.js"></script>
+<script src="./static/drag.js"></script>
+-->
+
+<script>
+    var app = angular.module("myApp", []);
+    app.controller("myCtrl", function($scope, $http) {
+
+    });
+    document.title = location.href;
+</script>
+
+</body>
+</html>
