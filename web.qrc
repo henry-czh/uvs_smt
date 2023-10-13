@@ -1,5 +1,16 @@
 <RCC>
   <qresource>
+    <file>web/static/angular.min.js</file>
+    <file>web/static/cbs-m.png</file>
+    <file>web/static/colors.png</file>
+    <file>web/static/colors.svg</file>
+    <file>web/static/config.js</file>
+    <file>web/static/drag.css</file>
+    <file>web/static/drag.js</file>
+    <file>web/static/jquery-3.0.0.min.js</file>
+    <file>web/static/my_tool.js</file>
+    <file>web/static/script.js</file>
+    <file>web/static/style.css</file>
     <file>web/qtconfig.html</file>
   </qresource>
 </RCC>

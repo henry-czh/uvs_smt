@@ -101,7 +101,7 @@ class MutiWorkThread():
         self.finishedTasks = self.finishedTasks + 1
         progress_value = (self.finishedTasks / len(self.threads)) * 100
         self.progressBar.setValue(int(progress_value))
-        style = "QProgressBar::chunk { background-color: yellow; }"  # 设置已完成部分的颜色
+        style = "QProgressBar::chunk { background-color: orange; }"  # 设置已完成部分的颜色
         style += "QProgressBar {border: 2px solid grey; border-radius: 5px; background: lightgrey;}" 
         style += "QProgressBar { text-align: center; }"  # 设置文本居中
         self.progressBar.setStyleSheet(style)

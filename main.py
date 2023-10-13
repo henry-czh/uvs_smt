@@ -15,6 +15,7 @@ import time
 
 #PyQt5��������������������PyQt5.QtWidgets������
 #from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt5 import sip
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -26,7 +27,8 @@ import extractDiag
 import webChannel
 from workerThread import MutiWorkThread
 from custom_widget import *
-from ico import icon
+#from ico import icon
+from web_rc import qInitResources
 
 from PyQt5.QtCore import QEvent
 from PyQt5.QtWidgets import QComboBox, QSpinBox
@@ -36,6 +38,7 @@ from PyQt5.QtWebEngineWidgets import QWebEnginePage
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngine import QtWebEngine
+from PyQt5.QtWebEngineWidgets import QWebEngineSettings
 
 
 class MyMainForm(QMainWindow, Ui_smt):
@@ -43,6 +46,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         super(MyMainForm, self).__init__(parent)
         self.setupUi(self)
 
+        qInitResources()
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # 设置窗口关闭策略为允许通过关闭按钮关闭
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -111,10 +115,9 @@ class MyMainForm(QMainWindow, Ui_smt):
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         #self.web_view.loadFinished.connect(self.loadFinished)
         #self.web_view.loadProgress.connect(self.loadProgress)
-        #html_file = os.path.abspath(os.path.join(os.path.dirname(__file__),'web/qtconfig.html'))
-        html_file = os.path.join(os.getenv("SMT_HOME"),'web/qtconfig.html')
-        print(html_file)
-        self.web_view.setUrl(QUrl.fromLocalFile(html_file))
+        #url = QUrl.fromLocalFile(os.path.join(os.getenv("SMT_HOME"),"web/qtconfig.html"))
+        #self.web_view.setUrl(url)
+        self.web_view.setUrl(QUrl("qrc:/web/qtconfig.html"))
 
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # 打开外部网页, 用以集成内网各平台环境
@@ -309,7 +312,7 @@ class MyMainForm(QMainWindow, Ui_smt):
 
             if new_text != old_text:
                 # 只在文本更改时更改背景颜色
-                item.setBackground(Qt.yellow)
+                item.setBackground(QColor("orange"))
 
             # 更新previous_data以反映新的文本
             self.previous_data[row][col-2] = new_text
@@ -611,7 +614,7 @@ class MyMainForm(QMainWindow, Ui_smt):
                     else:
                         new_item = QTableWidgetItem(source_item.text())
                     # 更改单元格的背景颜色
-                    new_item.setBackground(Qt.yellow)
+                    new_item.setBackground(Qt.orange)
                     self.diag_table.setItem(new_row, col, new_item)
         
         # 调整列宽以适应内容
@@ -644,13 +647,18 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.treeView_menu.popup(QCursor.pos())
 
 if __name__ == "__main__":
-    #QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+    QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     
     ## 设置Qt::AA_UseOpenGLES属性
-    #QCoreApplication.setAttribute(Qt.AA_UseOpenGLES)
+    QCoreApplication.setAttribute(Qt.AA_UseOpenGLES)
 
     #固定的，PyQt5程序都需要QApplication对象。sys.argv是命令行参数列表，确保程序可以双击运行
     app = QApplication(sys.argv)
+
+    QWebEngineSettings.globalSettings().setAttribute(QWebEngineSettings.JavascriptEnabled, True)
+
+    exe_path = os.path.dirname(sys.executable)
+    QCoreApplication.addLibraryPath(exe_path)
     #初始化
     myWin = MyMainForm()
     #将窗口控件显示在屏幕上

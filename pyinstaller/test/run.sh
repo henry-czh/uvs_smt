@@ -11,5 +11,6 @@ export SMT_HOME=/home/czh/github/uvs_smt
 #python2 ./verif_config/cgi-bin/parseConfig.py $BASE_CONFIG_FILE $USER_CONFIG_FILE
 export XDG_SESSION_TYPE=x11 #/usr/local/bin/your_soft_bin
 
-#python3 -B ../../main.py --disable-seccomp-filter-sandbox
-../dist/main
+python3 -B ../../main.py --disable-seccomp-filter-sandbox
+#../dist/main/main
+#~/main/main

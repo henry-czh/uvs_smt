@@ -83,7 +83,7 @@ class DataObject(QObject):
             if '<i success>' in s:
                 color = 'green'
             elif '<i warning>' in s:
-                color = 'yellow'
+                color = 'orange'
             elif '<i>Fatal' in s or '<i>[Error]' in s:
                 color = 'red'
             else:
