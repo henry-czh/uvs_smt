@@ -11,4 +11,7 @@ build:
 	pyinstaller $(opt) ../main.py
 
 clean:
-	rm -rf dist build main.spec
+	rm -rf dist build
+
+spec_build:
+	pyinstaller main.spec

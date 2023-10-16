@@ -161,6 +161,19 @@ class MyMainForm(QMainWindow, Ui_smt):
         # 连接表头点击信号
         #self.diag_table.horizontalHeader().sectionClicked.connect(self.onHeaderClicked)
 
+        # 设置表头标签
+        self.diag_table.setColumnCount(10)
+        self.table_header = [" ", " ",
+                        "testcase*", 
+                        "path*", 
+                        "config*",
+                        "scp",
+                        "comp_argvs",
+                        "run_argvs",
+                        "run_boards",
+                        "argv"]
+        self.diag_table.setHorizontalHeaderLabels(self.table_header)
+
         self.fillDataForTable()
 
         # 连接到itemChanged信号
@@ -220,23 +233,11 @@ class MyMainForm(QMainWindow, Ui_smt):
         # 设置初始行数和列数
         line_nums = len(self.diag_info)
         self.diag_table.setRowCount(line_nums)
-        self.diag_table.setColumnCount(10)
-
-        # 设置表头标签
-        self.table_header = [" ", " ",
-                        "testcase*", 
-                        "path*", 
-                        "config*",
-                        "scp",
-                        "comp_argvs",
-                        "run_argvs",
-                        "run_boards",
-                        "argv"]
-        self.diag_table.setHorizontalHeaderLabels(self.table_header)
 
         self.previous_data = [[str(cellData) for cellData in row] for row in self.diag_info]
 
         for row, rowData in enumerate(self.diag_info):
+            self.textBrowser.consel(str(row), 'black')
             path_exist = False
             for col, cellData in enumerate(rowData):
                 item = QTableWidgetItem(str(cellData))
@@ -245,6 +246,7 @@ class MyMainForm(QMainWindow, Ui_smt):
                     simdir_path = os.path.join(os.getcwd(),'simdir',str(cellData))
                 if col==0 and os.path.exists(simdir_path):
                     path_exist = True
+                self.textBrowser.consel(str(cellData), 'black')
 
             # 创建一个QCheckBox并将其放入单元格
             checkbox = QTableWidgetItem()
@@ -253,16 +255,13 @@ class MyMainForm(QMainWindow, Ui_smt):
             self.diag_table.setItem(row, 1, checkbox)
 
             # 设置元格Item
-            item = QTableWidgetItem()
+            statusItem = QTableWidgetItem()
             if path_exist:
                 pixmap = QPixmap(":/ico/checkmark.png")
             else:
                 pixmap = QPixmap(":/ico/null.png")
-            item.setIcon(QIcon(pixmap))
-            #item.setBackground(Qt.white)
-            self.diag_table.setItem(row, 0, item)
-
-            item.setBackground(QColor(255, 255, 255))  # 恢复默认背景颜色
+            statusItem.setIcon(QIcon(pixmap))
+            self.diag_table.setItem(row, 0, statusItem)
 
         # 调整列宽以适应内容
         self.diag_table.resizeColumnsToContents()
@@ -372,7 +371,9 @@ class MyMainForm(QMainWindow, Ui_smt):
     # 重新加载diag文件
     #********************************************************
     def reloadDiagFunc(self):
+        self.textBrowser.consel("刷新diag表信息.","green")
         self.diag_table.clearContents()
+        self.diag_table.setRowCount(0)
         self.previous_data = []
         self.fillDataForTable()
 
@@ -385,6 +386,8 @@ class MyMainForm(QMainWindow, Ui_smt):
 
         for row in range(self.diag_table.rowCount()):
             for col in range(self.diag_table.columnCount()):
+                if col <= 1:
+                    continue
                 colData = self.diag_table.item(row,col).text()
                 if col==2:
                     fout.write(colData + ' ')
@@ -415,9 +418,6 @@ class MyMainForm(QMainWindow, Ui_smt):
         if confirm:
             if os.path.exists(QDir.homePath()+'/.current_setting.cbs'):
                 os.system('rm %s' % (QDir.homePath()+'/.current_setting.cbs'))
-            #self.process.terminate()
-            #self.process.wait()
-            #os.killpg(self.process.pid,signal.SIGTERM) 
             event.accept()  # 允许关闭窗口
         else:
             event.ignore()  # 取消关闭窗口
@@ -590,6 +590,9 @@ class MyMainForm(QMainWindow, Ui_smt):
             self.diag_table.removeRow(row)
 
     def addTableItem(self):
+        self.textBrowser.consel("创建新的diag项.", 'green')
+        self.textBrowser.consel(str(self.diag_table.columnCount()), 'green')
+
         # 新增一行并复制当前选中的行
         selected_rows = set()
         for item in self.diag_table.selectedItems():
@@ -598,25 +601,38 @@ class MyMainForm(QMainWindow, Ui_smt):
         new_row = self.diag_table.rowCount()
         self.diag_table.insertRow(new_row)
 
+        copy_valid = True
         if not selected_rows:
-            return
+            copy_valid = False
+            selected_rows.add(0)
 
         for row in selected_rows:
             for col in range(self.diag_table.columnCount()):
-                if col in [0,1]:
-                    new_item = self.diag_table.item(row, col).clone()
-                    self.diag_table.setItem(new_row, col, new_item)
-                    continue
-                source_item = self.diag_table.item(row, col)
-                if source_item:
-                    if col == 2:
-                        new_item = QTableWidgetItem(source_item.text()+'_new')
-                    else:
-                        new_item = QTableWidgetItem(source_item.text())
-                    # 更改单元格的背景颜色
-                    new_item.setBackground(Qt.orange)
-                    self.diag_table.setItem(new_row, col, new_item)
+                if copy_valid:
+                    source_item = self.diag_table.item(row, col).text()
+                else:
+                    source_item = ''
+
+                if col == 2:
+                    new_item = QTableWidgetItem(source_item+'_new')
+                else:
+                    new_item = QTableWidgetItem(source_item)
+                # 更改单元格的背景颜色
+                new_item.setBackground(QColor("orange"))
+                self.diag_table.setItem(new_row, col, new_item)
         
+            # 创建一个QCheckBox并将其放入单元格
+            checkbox = QTableWidgetItem()
+            checkbox.setFlags(checkbox.flags() | Qt.ItemIsUserCheckable)
+            checkbox.setCheckState(Qt.Unchecked)
+            self.diag_table.setItem(new_row, 1, checkbox)
+
+            # 设置元格Item
+            statusItem = QTableWidgetItem()
+            pixmap = QPixmap(":/ico/null.png")
+            statusItem.setIcon(QIcon(pixmap))
+            self.diag_table.setItem(new_row, 0, statusItem)
+
         # 调整列宽以适应内容
         self.diag_table.resizeColumnsToContents()
 
