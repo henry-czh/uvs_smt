@@ -68,7 +68,7 @@
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
-          <verstretch>3</verstretch>
+          <verstretch>2</verstretch>
          </sizepolicy>
         </property>
         <property name="minimumSize">
@@ -340,7 +340,7 @@
                <x>0</x>
                <y>0</y>
                <width>894</width>
-               <height>563</height>
+               <height>526</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -752,7 +752,7 @@
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>1</horstretch>
-         <verstretch>5</verstretch>
+         <verstretch>4</verstretch>
         </sizepolicy>
        </property>
        <property name="minimumSize">
@@ -770,7 +770,7 @@
        <property name="font">
         <font>
          <family>DejaVu Sans Mono</family>
-         <pointsize>10</pointsize>
+         <pointsize>9</pointsize>
         </font>
        </property>
        <property name="toolTipDuration">
@@ -823,7 +823,7 @@
      <x>0</x>
      <y>0</y>
      <width>1245</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

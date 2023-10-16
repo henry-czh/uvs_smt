@@ -61,6 +61,9 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.svgfile = os.getenv('SVG_FILE')
         self.diag_file = os.getenv('DIAG_FILE')
 
+        self.reloadDiagEvent = False
+        self.saveDiagEvent = False
+
         #self.html_file = os.getenv('HTML_FILE')
         #self.saveDir = os.path.abspath(os.path.join(os.getcwd(), "../config"))
 
@@ -70,7 +73,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.textBrowser = ColoredTextBrowser(self.Consel)
         font = QFont()
         font.setFamily("Monospace")
-        font.setPointSize(10)
+        font.setPointSize(9)
         self.textBrowser.setFont(font)
         self.textBrowser.setObjectName("textBrowser")
         self.verticalLayout_5.addWidget(self.textBrowser)
@@ -148,7 +151,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.treeView_filebrowser.doubleClicked.connect(self.creat_rightmenu)
         
         # tooltip
-        QToolTip.setFont(QFont('SansSerif',10))
+        QToolTip.setFont(QFont('SansSerif',9))
         self.treeView_filebrowser.setToolTip('双击或单击右键可调出菜单')
 
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -193,7 +196,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Set statusbar information
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
-        self.statusbar.showMessage('如有疑问, 请联系 chaozhanghu@phytium.com.cn  @Qsmtool 23.09-0001')
+        self.statusbar.showMessage('如有疑问, 请联系 chaozhanghu@phytium.com.cn  @Qsmtool 23.09-0001', 0)
         self.statusbar.show()
 
         #********************************************************
@@ -237,7 +240,6 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.previous_data = [[str(cellData) for cellData in row] for row in self.diag_info]
 
         for row, rowData in enumerate(self.diag_info):
-            self.textBrowser.consel(str(row), 'black')
             path_exist = False
             for col, cellData in enumerate(rowData):
                 item = QTableWidgetItem(str(cellData))
@@ -246,7 +248,6 @@ class MyMainForm(QMainWindow, Ui_smt):
                     simdir_path = os.path.join(os.getcwd(),'simdir',str(cellData))
                 if col==0 and os.path.exists(simdir_path):
                     path_exist = True
-                self.textBrowser.consel(str(cellData), 'black')
 
             # 创建一个QCheckBox并将其放入单元格
             checkbox = QTableWidgetItem()
@@ -266,55 +267,16 @@ class MyMainForm(QMainWindow, Ui_smt):
         # 调整列宽以适应内容
         self.diag_table.resizeColumnsToContents()
 
-    def onHeaderClicked(self, logicalIndex):
-
-        if not logicalIndex in [0,1]:
-            return
-
-        #if logicalIndex:
-        #    # 自定义排序操作，根据复选框的选中状态排序
-        #    rows = self.diag_table.rowCount()
-        #    sorted_rows = sorted(range(rows), key=lambda row: self.diag_table.item(row, 1).checkState())
-        
-        #    new_table_item = []
-
-        #    for new_row, original_row in enumerate(sorted_rows):
-        #        #print(f"{new_row} : {original_row}")
-        #        row_items = []
-        #        for col in range(self.diag_table.columnCount()):
-        #            item = self.diag_table.takeItem(original_row, col)
-        #            row_items.append(item)
-        #        new_table_item.append(row_items)
-        
-        #    for row in range(self.diag_table.rowCount()):
-        #        for col in range(self.diag_table.columnCount()):
-        #            self.diag_table.setItem(row, col, new_table_item[row][col])
-        ##else:
-
     #********************************************************
     # 当diag table发生编辑时，触发相关函数 1. 改变背景颜色；
     #********************************************************
     def handleItemChanged(self, item):
-        # 处理单元格内容更改事件
-        if item:
-            row = item.row()
-            col = item.column()
-            if col < 2:
-                return
-            new_text = item.text()
-            # 新增的行没有在previous_data中
-            if row >= len(self.previous_data):
-                old_text = ''
-                self.previous_data.append([""] * self.diag_table.columnCount())
-            else:
-                old_text = self.previous_data[row][col-2]
+        if item and item.column() < 2:
+            return
 
-            if new_text != old_text:
-                # 只在文本更改时更改背景颜色
-                item.setBackground(QColor("orange"))
-
-            # 更新previous_data以反映新的文本
-            self.previous_data[row][col-2] = new_text
+        # 只在文本更改时更改背景颜色
+        if not self.reloadDiagEvent and not self.saveDiagEvent:
+            item.setBackground(QColor("orange"))
 
         # 调整列宽以适应内容
         self.diag_table.resizeColumnsToContents()
@@ -371,16 +333,24 @@ class MyMainForm(QMainWindow, Ui_smt):
     # 重新加载diag文件
     #********************************************************
     def reloadDiagFunc(self):
+        self.reloadDiagEvent = True
         self.textBrowser.consel("刷新diag表信息.","green")
+        self.diag_table.setSortingEnabled(False)
         self.diag_table.clearContents()
         self.diag_table.setRowCount(0)
-        self.previous_data = []
         self.fillDataForTable()
+        self.diag_table.repaint()
+        self.diag_table.setSortingEnabled(True)
+        self.reloadDiagEvent = False
+
+        # 调整列宽以适应内容
+        self.diag_table.resizeColumnsToContents()
 
     #********************************************************
     # 保存diag文件
     #********************************************************
     def saveDiagFunc(self):
+        self.saveDiagEvent = True
         fout = open(self.diag_file, 'w+')
         fout.write("// 以下为SMT自动生成内容, 遵循diag语法规则, 可以自行编辑该文件.\n\n")
 
@@ -398,6 +368,7 @@ class MyMainForm(QMainWindow, Ui_smt):
                 self.diag_table.item(row,col).setBackground(QColor(255, 255, 255))  # 恢复默认背景颜色
             fout.write('\n\n')
 
+        self.saveDiagEvent = False
         self.textBrowser.consel('Diag文件保存成功.', 'green')
 
     def selectalltcFunc(self):
@@ -513,7 +484,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         if not selected_item:
             return
 
-        path = self.diag_table.item(selected_item.row(), 3).text().strip()
+        path = self.diag_table.item(selected_item.row(), 2).text().strip()
         source_path = os.path.join(os.getcwd(), 'simdir', path)
         if os.path.exists(source_path):
             self.treeView_filebrowser.setRootIndex(self.dir_model.index(source_path))
@@ -591,7 +562,6 @@ class MyMainForm(QMainWindow, Ui_smt):
 
     def addTableItem(self):
         self.textBrowser.consel("创建新的diag项.", 'green')
-        self.textBrowser.consel(str(self.diag_table.columnCount()), 'green')
 
         # 新增一行并复制当前选中的行
         selected_rows = set()
@@ -608,6 +578,8 @@ class MyMainForm(QMainWindow, Ui_smt):
 
         for row in selected_rows:
             for col in range(self.diag_table.columnCount()):
+                if col < 2:
+                    continue
                 if copy_valid:
                     source_item = self.diag_table.item(row, col).text()
                 else:
@@ -646,21 +618,48 @@ class MyMainForm(QMainWindow, Ui_smt):
     def loadProgress(self, progress):
         print("加载进度:", progress)
 
-    def open_with_gvim(self):
+    def openFileBrowser(self, tool):
         index = self.treeView_filebrowser.currentIndex()
-        if index.isValid() and not self.dir_model.isDir(index):
-            file_name = self.dir_model.filePath(index)
-            self.textBrowser.consel("打开文件 %s" % (file_name), 'black')
-            os.system('gvim --remote-tab-silent %s' % (file_name))
+        #if index.isValid() and not self.dir_model.isDir(index):
+        if not index.isValid():
+            return
+        file_name = self.dir_model.filePath(index)
+        self.textBrowser.consel(f"{tool}打开 {file_name}", 'black')
+        self.statusbar.showMessage(f"{tool}打开 {file_name}")
+        self.statusbar.show()
+
+        if tool == 'Gvim':
+            cmd = f"gvim --remote-tab-silent {file_name}"
+        elif tool == 'vscode':
+            cmd = f"code {file_name}"
+        elif tool == 'Simvision':
+            cmd = f"simvision -64bit {file_name}"
+        elif tool == 'Verdi':
+            cmd = f"verdi -ssf {file_name}"
+
+        os.system(cmd)
+
+    def openWithGvim(self):
+        self.openFileBrowser("Gvim")
+        self.statusbar.showMessage('如有疑问, 请联系 chaozhanghu@phytium.com.cn  @Qsmtool 23.09-0001', 0)
+        self.statusbar.show()
+
+    def openWithCode(self):
+        self.openFileBrowser("vscode")
 
     def creat_rightmenu(self):
         self.treeView_menu=QMenu(self)
 
         self.actionA = QAction(u'Open With Gvim',self)
-        self.actionA.triggered.connect(self.open_with_gvim)
+        self.actionA.triggered.connect(self.openWithGvim)
+
+        self.actionCode = QAction(u'Open With Code',self)
+        self.actionCode.triggered.connect(self.openWithCode)
 
         self.treeView_menu.addAction(self.actionA)
+        self.treeView_menu.addAction(self.actionCode)
         self.treeView_menu.popup(QCursor.pos())
+
 
 if __name__ == "__main__":
     QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
