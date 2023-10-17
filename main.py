@@ -138,7 +138,7 @@ class MyMainForm(QMainWindow, Ui_smt):
 
         #self.current_path = QDir.currentPath()
         self.current_path = os.getenv('CBS_HOME')
-        self.dir_model.setRootPath(self.current_path)
+        self.root_index = self.dir_model.setRootPath(self.current_path)
         self.treeView_filebrowser.setModel(self.dir_model)
         self.treeView_filebrowser.setRootIndex(self.dir_model.index(self.current_path))
 
@@ -307,7 +307,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         if self.cleanCB.isChecked():
             cmd = cmd + 'clean '
         if self.updateconfigsCB.isChecked():
-            cmd = cmd + 'updateconfigs '
+            cmd = cmd + 'updateconfig '
         if self.buildCB.isChecked():
             cmd = cmd + 'build '
         if self.compiler.isChecked():
@@ -469,6 +469,33 @@ class MyMainForm(QMainWindow, Ui_smt):
         # 显示右键菜单
         context_menu.exec_(self.diag_table.mapToGlobal(pos))
 
+    def expandSubDir(self, subdir):
+        # 折叠（收起）所有已展开的项
+        self.treeView_filebrowser.collapseAll()
+
+        if os.path.exists(subdir):
+            #self.treeView_filebrowser.setRootIndex(self.dir_model.index(source_path))
+            ## 获取子目录项（在此示例中为"Sub Directory"）
+            sub_directory_index = self.dir_model.index(subdir)
+
+            # 获取从根目录到特定索引的路径
+            path_to_index = []
+            while sub_directory_index.isValid():
+                path_to_index.insert(0, sub_directory_index)
+                sub_directory_index = sub_directory_index.parent()
+
+            # 逐级展开路径
+            current_index = self.root_index
+            for index in path_to_index:
+                current_index = index
+                self.treeView_filebrowser.setExpanded(current_index, True)
+
+            # 将最后一级目录设置为选中状态
+            self.treeView_filebrowser.setCurrentIndex(current_index)
+        else:
+            self.textBrowser.consel("路径不存在: %s" % (subdir), 'red')
+
+
     def showSource(self):
         selected_item = self.getSelectedRow();
         if not selected_item:
@@ -477,10 +504,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         path = self.diag_table.item(selected_item.row(), 3).text().strip()
         source_path = os.path.join(os.getcwd(), 'src/c', path)
 
-        if os.path.exists(source_path):
-            self.treeView_filebrowser.setRootIndex(self.dir_model.index(source_path))
-        else:
-            self.textBrowser.consel("路径不存在: %s" % (source_path), 'red')
+        self.expandSubDir(source_path)
 
     def showSimdir(self):
         selected_item = self.getSelectedRow();
@@ -489,24 +513,18 @@ class MyMainForm(QMainWindow, Ui_smt):
 
         path = self.diag_table.item(selected_item.row(), 2).text().strip()
         source_path = os.path.join(os.getcwd(), 'simdir', path)
-        if os.path.exists(source_path):
-            self.treeView_filebrowser.setRootIndex(self.dir_model.index(source_path))
-        else:
-            self.textBrowser.consel("路径不存在: %s" % (source_path), 'red')
+
+        self.expandSubDir(source_path)
 
     def refreshFileBrowser(self):
         source_path = os.getenv('CBS_HOME')
-        if os.path.exists(source_path):
-            self.treeView_filebrowser.setRootIndex(self.dir_model.index(source_path))
-        else:
-            self.textBrowser.consel("路径不存在: %s" % (source_path), 'red')
+
+        self.expandSubDir(source_path)
 
     def showTB(self):
         source_path = os.getenv('TB_HOME')
-        if os.path.exists(source_path):
-            self.treeView_filebrowser.setRootIndex(self.dir_model.index(source_path))
-        else:
-            self.textBrowser.consel("路径不存在: %s" % (source_path), 'red')
+
+        self.expandSubDir(source_path)
 
     def showTableConfig(self):
         selected_item = self.getSelectedRow();

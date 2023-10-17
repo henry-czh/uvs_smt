@@ -25,7 +25,7 @@ class WorkerThread(QThread):
             if return_code == 0:
                 self.finished.emit(f"[Success] 子进程 {self.command} 执行完成.")  # 发射任务完成信号
             else:
-                self.finished.emit(f"[ERROR] 子进程 {self.command} 执行错误, 详情如下:\n")  # 发射任务完成信号
+                self.finished.emit(f"[ERROR] 子进程 {self.command} 执行错误 \n")  # 发射任务完成信号
                 error_info = f" \n子进程 {self.command} 异常退出 (返回码 {return_code}) \n" 
                 # 获取错误信息
                 stderr_output = self.process.stderr.read()
@@ -69,13 +69,13 @@ class MutiWorkThread():
 
         # 启动子进程并存储 Popen 对象
         for command in self.commands:
+            self.consol.consel(f"任务 {command} 开始执行！", 'black')
             thread = WorkerThread(command)
             thread.finished.connect(self.taskFinished)
             thread.error.connect(self.taskError)
             self.threads.append(thread)
             thread.start()
 
-        #self.checkProcessStatus()
     def stop(self):
         for thread in self.threads:
             thread.stop()
