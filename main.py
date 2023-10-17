@@ -528,8 +528,6 @@ class MyMainForm(QMainWindow, Ui_smt):
         var inputElement = document.getElementById("fileSave");
         inputElement.value = \"{config_name}\";
         '''
-        #js_code = "pyqtLoadConfig(\"%s\");" % (file_contents.replace('\n', '\\n'))
-        #js_code = "pyqtLoadConfig(\"%s\");" % (file_contents)
         self.web_view.page().runJavaScript(js_code)
         self.showSVGTab()
 
