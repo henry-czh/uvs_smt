@@ -300,7 +300,10 @@ class MyMainForm(QMainWindow, Ui_smt):
     #********************************************************
     def collectOpts(self):
         # 1. 收集参数
-        cmd = 'make '
+        if self.cloudCB.isChecked():
+            cmd = 'bsub make '
+        else:
+            cmd = 'make '
         if self.cleanCB.isChecked():
             cmd = cmd + 'clean '
         if self.updateconfigsCB.isChecked():
@@ -515,12 +518,18 @@ class MyMainForm(QMainWindow, Ui_smt):
         if os.path.exists(config_file):
             with open(config_file, 'r') as file:
                 file_contents = file.read()
+                file_contents = file_contents.replace('\n', '\\n')
         else:
             self.textBrowser.consel('该测试项对应的配置文件不存在!', 'red')
             return
 
         # 在这里触发执行Web页面中的JavaScript函数
-        js_code = "pyqtLoadConfig(\"%s\");" % (file_contents.replace('\n', '\\n'))
+        js_code = f'''pyqtLoadConfig(\"{file_contents}\");
+        var inputElement = document.getElementById("fileSave");
+        inputElement.value = \"{config_name}\";
+        '''
+        #js_code = "pyqtLoadConfig(\"%s\");" % (file_contents.replace('\n', '\\n'))
+        #js_code = "pyqtLoadConfig(\"%s\");" % (file_contents)
         self.web_view.page().runJavaScript(js_code)
         self.showSVGTab()
 
