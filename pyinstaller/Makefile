@@ -10,7 +10,7 @@ opt += --name=QSmtool
 
 build:
 	pyinstaller $(opt) ../main.py
-	cp ./dist/QSmtool/PyQt5/Qt/libexec/qt.conf ./dist/QSmtool
+	cp ./qt.conf ./dist/QSmtool
 
 clean:
 	rm -rf dist build

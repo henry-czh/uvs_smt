@@ -340,7 +340,7 @@
                <x>0</x>
                <y>0</y>
                <width>854</width>
-               <height>579</height>
+               <height>576</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -375,13 +375,14 @@
              <widget class="QCheckBox" name="cloudCB">
               <property name="font">
                <font>
+                <family>DejaVu Sans Mono</family>
                 <pointsize>9</pointsize>
                 <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
               <property name="text">
-               <string>EDA</string>
+               <string>EDA云</string>
               </property>
               <property name="tristate">
                <bool>false</bool>
@@ -444,6 +445,7 @@
             </property>
             <property name="font">
              <font>
+              <family>DejaVu Sans Mono</family>
               <pointsize>9</pointsize>
              </font>
             </property>
@@ -495,6 +497,8 @@
                  <widget class="QLabel" name="label_3">
                   <property name="font">
                    <font>
+                    <family>Ubuntu</family>
+                    <pointsize>11</pointsize>
                     <weight>75</weight>
                     <bold>true</bold>
                     <underline>false</underline>
@@ -551,6 +555,8 @@
                  <widget class="QLabel" name="label_21">
                   <property name="font">
                    <font>
+                    <family>Ubuntu</family>
+                    <pointsize>11</pointsize>
                     <weight>75</weight>
                     <bold>true</bold>
                    </font>
@@ -575,7 +581,7 @@
                 <item row="2" column="2">
                  <widget class="QCheckBox" name="mlCB">
                   <property name="text">
-                   <string>multi-lib</string>
+                   <string>ml</string>
                   </property>
                  </widget>
                 </item>
@@ -630,7 +636,7 @@
                 <item row="1" column="4">
                  <widget class="QCheckBox" name="fsdbCB">
                   <property name="text">
-                   <string>dump fsdb</string>
+                   <string>fsdb</string>
                   </property>
                  </widget>
                 </item>
@@ -638,6 +644,8 @@
                  <widget class="QLabel" name="label_4">
                   <property name="font">
                    <font>
+                    <family>Ubuntu</family>
+                    <pointsize>11</pointsize>
                     <weight>75</weight>
                     <bold>true</bold>
                    </font>
@@ -1713,7 +1721,7 @@
      <x>0</x>
      <y>0</y>
      <width>1245</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

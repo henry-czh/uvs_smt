@@ -4,6 +4,7 @@ import sys
 import os
 import re
 import subprocess
+import psutil
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -16,37 +17,47 @@ class WorkerThread(QThread):
     def __init__(self, command):
         super().__init__()
         self.command = command
+        self.process = None
 
     def run(self):
         try:
-            self.process = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            # 去除stdout，大量的stdout会塞满PIPE，导致子进程卡死
+            #self.process = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            self.process = subprocess.Popen(self.command, shell=True, stderr=subprocess.PIPE)
+
+            self.task =  f"任务 {self.command} 子进程pid {self.process.pid}"
+            self.finished.emit(f"[Info] {self.task} 开始执行.")  # 发射任务完成信号
             # 等待子进程完成
             return_code = self.process.wait()  # 等待外部进程执行完成
             if return_code == 0:
-                self.finished.emit(f"[Success] 子进程 {self.command} 执行完成.")  # 发射任务完成信号
+                self.finished.emit(f"[Success] {self.task} 执行完成.")  # 发射任务完成信号
             else:
-                self.finished.emit(f"[ERROR] 子进程 {self.command} 执行错误 \n")  # 发射任务完成信号
-                error_info = f" \n子进程 {self.command} 异常退出 (返回码 {return_code}) \n" 
+                self.finished.emit(f"[ERROR] {self.task} 执行错误 \n")  # 发射任务完成信号
+                error_info = f" \n{self.task} 异常退出 (返回码 {return_code}) \n" 
                 # 获取错误信息
                 stderr_output = self.process.stderr.read()
                 if stderr_output:
                     error_info += f"错误信息:\n{stderr_output.decode('utf-8')}\n"
 
-                # 获取标准输出信息
-                stdout_output = self.process.stdout.read()
-                if stdout_output:
-                    error_info += f"标准输出信息:\n{stdout_output.decode('utf-8')}\n"
+                ## 获取标准输出信息
+                #stdout_output = self.process.stdout.read()
+                #if stdout_output:
+                #    error_info += f"标准输出信息:\n{stdout_output.decode('utf-8')}\n"
 
                 self.error.emit(error_info)
         except Exception as e:
             # 发射错误信息信号
-            self.error.emit(f"任务发布失败: {str(e)}")
+            self.error.emit(f"任务发布失败: {str(e)} \n")
 
     def stop(self):
         if hasattr(self, "process") and self.process.poll() is None:
+            parent = psutil.Process(self.process.pid)
+            for child in parent.children(recursive=True):
+                child.terminate()
             # 终止 subprocess 进程
             self.process.terminate()
             self.process.wait()
+            self.process = None
             self.finished.emit(f"[Stopped] 子进程 {self.command} 提前结束.")  # 发射任务完成信号
 
 class MutiWorkThread():
@@ -69,7 +80,6 @@ class MutiWorkThread():
 
         # 启动子进程并存储 Popen 对象
         for command in self.commands:
-            self.consol.consel(f"任务 {command} 开始执行！", 'black')
             thread = WorkerThread(command)
             thread.finished.connect(self.taskFinished)
             thread.error.connect(self.taskError)
@@ -84,12 +94,17 @@ class MutiWorkThread():
         if '[Success]' in testcaseStr:
             status = 'green'
         elif '[Stopped]' in testcaseStr:
-            status = 'bule'
+            status = 'orange'
+        elif '[Info]' in testcaseStr:
+            status = 'black'
         else:
             status = 'red'
         self.consol.consel(testcaseStr, status)
 
         self.tagProcessStatus(testcaseStr)
+
+        if status == 'black':
+            return
 
         self.finishedTasks = self.finishedTasks + 1
         progress_value = (self.finishedTasks / len(self.threads)) * 100
@@ -108,6 +123,9 @@ class MutiWorkThread():
         
     def tagProcessStatus(self, statusStr):
         test_pattern = re.compile(r"test=(.+?) ")
+        if '[Info]' in statusStr:
+            return
+
         finishedItem = test_pattern.findall(statusStr)[0]
 
         if '[Success]' in statusStr:

@@ -12,6 +12,7 @@ import copy
 import subprocess
 import signal
 import time
+import collections
 
 #PyQt5��������������������PyQt5.QtWidgets������
 #from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
@@ -63,6 +64,10 @@ class MyMainForm(QMainWindow, Ui_smt):
 
         self.reloadDiagEvent = False
         self.saveDiagEvent = False
+        self.simulateCMD = collections.OrderedDict()
+        self.simulateCMD = {'clean':None,'build':None,'compiler':None,'elab':None,'sim':None,
+                            'run':None,'multi-lib':None,'gui':None,"fsdb":None,'wave':None,
+                            'EDA云':None}
 
         #self.html_file = os.getenv('HTML_FILE')
         #self.saveDir = os.path.abspath(os.path.join(os.getcwd(), "../config"))
@@ -223,6 +228,21 @@ class MyMainForm(QMainWindow, Ui_smt):
         # action "refresh file browser"
         self.actionreload.triggered.connect(self.refreshFileBrowser)
 
+        #********************************************************
+        # connect checkboxs and function 
+        #********************************************************
+        self.cloudCB.stateChanged.connect(self.connectCMDCB)
+        self.cleanCB.stateChanged.connect(self.connectCMDCB)
+        self.updateconfigsCB.stateChanged.connect(self.connectCMDCB)
+        self.buildCB.stateChanged.connect(self.connectCMDCB)
+        self.compiler.stateChanged.connect(self.connectCMDCB)
+        self.simu_runCB.stateChanged.connect(self.connectCMDCB)
+        self.simu_elabCB.stateChanged.connect(self.connectCMDCB)
+        self.simu_simCB.stateChanged.connect(self.connectCMDCB)
+        self.pldcompCB_2.stateChanged.connect(self.connectCMDCB)
+        self.pld_runCB_2.stateChanged.connect(self.connectCMDCB)
+        self.mlCB.stateChanged.connect(self.connectCMDCB)
+
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     #   xxxxxxxxxx      Functions       xxxxxxxxxxxx
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -299,33 +319,31 @@ class MyMainForm(QMainWindow, Ui_smt):
     # 运行仿真：1. 收集参数；
     #********************************************************
     def collectOpts(self):
-        # 1. 收集参数
-        if self.cloudCB.isChecked():
-            cmd = 'bsub make '
+        ## 1. 收集参数
+        if self.simulateCMD['EDA云']:
+            cmd = 'bsub -Is make '
         else:
             cmd = 'make '
-        if self.cleanCB.isChecked():
-            cmd = cmd + 'clean '
-        if self.updateconfigsCB.isChecked():
-            cmd = cmd + 'updateconfig '
-        if self.buildCB.isChecked():
-            cmd = cmd + 'build '
-        if self.compiler.isChecked():
-            cmd = cmd + 'compiler '
-        if self.simu_runCB.isChecked():
-            cmd = cmd + 'run '
-        if self.simu_elabCB.isChecked():
-            cmd = cmd + 'elab '
-        if self.simu_simCB.isChecked():
-            cmd = cmd + 'sim '
-        if self.pldcompCB.isChecked():
-            cmd = cmd + 'comp '
-        if self.pld_runCB.isChecked():
-            cmd = cmd + 'run '
-        if self.mlCB.isChecked():
-            cmd = cmd + 'ml=1 '
+        for key,value in self.simulateCMD.items():
+            if value:
+                if key == 'EDA云':
+                    continue
+                else:
+                    cmd += key + ' '
         
         return cmd
+
+    #********************************************************
+    # 运行仿真：1. 收集参数；
+    #********************************************************
+    def connectCMDCB(self):
+        sender = self.sender()  # 获取发出信号的复选框
+        if sender is not None and isinstance(sender, QCheckBox):
+            if sender.isChecked():
+                self.simulateCMD[sender.text()] = True
+            else:
+                self.simulateCMD[sender.text()] = False
+
     #********************************************************
     # 停止仿真：1. 收集参数；2. 批量处理任务； 3. 收集运行结果；
     #********************************************************

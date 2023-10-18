@@ -39,38 +39,39 @@ class ColoredTextBrowser(QTextBrowser):
 
     def tips(self):
         # 获取当前文本光标
-        cursor = self.textCursor()
+        self.cursor = self.textCursor()
 
         # 创建文本字符格式，设置颜色
         char_format = QTextCharFormat()
         char_format.setForeground(QColor('blue'))
-        cursor.setCharFormat(char_format)
+        self.cursor.setCharFormat(char_format)
 
         # 插入文本
         if self.last_time < time.mktime(time.localtime()):
             t = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-            cursor.insertText('<%s>\n' % (t))
+            self.cursor.insertText(f"\n<{t}>\n")
+            self.cursor.movePosition(QTextCursor.End)
+            self.setTextCursor(self.cursor)
 
     def consel(self, text, color):
         self.tips()
 
         # 获取当前文本光标
-        cursor = self.textCursor()
+        self.cursor = self.textCursor()
 
         # 创建文本字符格式，设置颜色
         char_format = QTextCharFormat()
         char_format.setForeground(QColor(color))
-        cursor.setCharFormat(char_format)
+        self.cursor.setCharFormat(char_format)
 
         for line in text.strip().split('\n'):
-            cursor.insertText(f"> {line} \n")
+            self.cursor.insertText(f"> {line} \n")
+            self.cursor.movePosition(QTextCursor.End)
 
         self.last_time = time.mktime(time.localtime())
         ## 恢复默认字符格式
         #cursor.setCharFormat(QTextCharFormat())
 
-        cursor.insertText("\n")
         # 每当文本内容更新时，滚动到底部
-        cursor.movePosition(QTextCursor.End)
-        self.setTextCursor(cursor)
+        self.setTextCursor(self.cursor)
 
