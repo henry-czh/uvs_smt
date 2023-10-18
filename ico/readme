@@ -1,1 +1,6 @@
 https://www.flaticon.com/icon-fonts-most-downloaded/2
+
+TODO:
+1. 全选按钮应该只选择显示的部分(过滤后的部分)；
+2. workerThread中增加一个testcase名与thread的对应关系，记录具体任务的完成情况，包括pending、running、stoped、error；
+3. 刷新按钮应该保持自打开界面以来，run过的testcase的执行结果，至到重新run或者重启界面；

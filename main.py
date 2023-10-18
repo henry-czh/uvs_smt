@@ -312,7 +312,7 @@ class MyMainForm(QMainWindow, Ui_smt):
 
         self.progressBar.setStyleSheet("")  # 清空样式表
         cmd = self.collectOpts()
-        self.mutiWorkThreads = MutiWorkThread(self.diag_table, self.textBrowser, self.progressBar)
+        self.mutiWorkThreads = MutiWorkThread(self.diag_table, self.textBrowser, self.progressBar, 2)
         self.mutiWorkThreads.run(cmd)
 
     #********************************************************

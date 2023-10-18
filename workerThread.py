@@ -5,6 +5,7 @@ import os
 import re
 import subprocess
 import psutil
+import queue
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -61,12 +62,18 @@ class WorkerThread(QThread):
             self.finished.emit(f"[Stopped] 子进程 {self.command} 提前结束.")  # 发射任务完成信号
 
 class MutiWorkThread():
-    def __init__(self, table, consol, progressBar):
+    def __init__(self, table, consol, progressBar, max_threads):
         super().__init__()
         self.table = table
         self.consol = consol
+        self.max_threads = max_threads
         self.progressBar = progressBar
         self.finishedTasks = 0
+        self.thread_count = 0
+        self.thread_queue = queue.Queue()
+
+        # 存储子进程的 Popen 对象
+        self.threads = []
 
     def run(self, cmd):
         # 定义要执行的命令列表，每个元素是一个命令字符串
@@ -75,16 +82,21 @@ class MutiWorkThread():
         if len(self.commands):
             self.progressBar.setValue(1)
 
-        # 存储子进程的 Popen 对象
-        self.threads = []
-
         # 启动子进程并存储 Popen 对象
-        for command in self.commands:
-            thread = WorkerThread(command)
-            thread.finished.connect(self.taskFinished)
-            thread.error.connect(self.taskError)
-            self.threads.append(thread)
-            thread.start()
+        for item in self.commands:
+            self.thread_queue.put(item)
+
+        while self.thread_count < self.max_threads and self.thread_count < self.thread_queue.qsize():
+            self.thread_count += 1
+            cur_cmd = self.thread_queue.get()
+            self.creat_thread(cur_cmd)
+
+    def creat_thread(self, cmd):
+        thread = WorkerThread(cmd)
+        thread.finished.connect(self.taskFinished)
+        thread.error.connect(self.taskError)
+        self.threads.append(thread)
+        thread.start()
 
     def stop(self):
         for thread in self.threads:
@@ -110,6 +122,11 @@ class MutiWorkThread():
         progress_value = (self.finishedTasks / len(self.threads)) * 100
         self.progressBar.setValue(int(progress_value))
 
+        # 启动下一个补位的thread
+        if not self.thread_queue.empty():
+            next_cmd = self.thread_queue.get()
+            self.creat_thread(next_cmd)
+
     def taskError(self, error_info):
         self.consol.consel(error_info, 'red')
 
@@ -121,6 +138,11 @@ class MutiWorkThread():
         style += "QProgressBar { text-align: center; }"  # 设置文本居中
         self.progressBar.setStyleSheet(style)
         
+        # 启动下一个补位的thread
+        if not self.thread_queue.empty():
+            next_cmd = self.thread_queue.get()
+            self.creat_thread(next_cmd)
+
     def tagProcessStatus(self, statusStr):
         test_pattern = re.compile(r"test=(.+?) ")
         if '[Info]' in statusStr:
