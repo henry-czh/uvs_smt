@@ -340,7 +340,7 @@
                <x>0</x>
                <y>0</y>
                <width>854</width>
-               <height>574</height>
+               <height>576</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1592,7 +1592,7 @@ color: rgb(255, 255, 255);</string>
             <item>
              <widget class="QPushButton" name="reload">
               <property name="toolTip">
-               <string>同步本地diag文件内容</string>
+               <string>同步本地diag文件内容, 将清楚运行结果记录，谨慎使用.</string>
               </property>
               <property name="text">
                <string>刷新</string>
@@ -1606,7 +1606,7 @@ color: rgb(255, 255, 255);</string>
             <item>
              <widget class="QPushButton" name="selectalltc">
               <property name="toolTip">
-               <string>选择全部testcase项</string>
+               <string>选择全部筛选出的testcase项</string>
               </property>
               <property name="text">
                <string>全选</string>
@@ -1779,7 +1779,7 @@ color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>1245</width>
-     <height>28</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
