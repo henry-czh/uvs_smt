@@ -59,21 +59,25 @@ class WorkerThread(QThread):
             self.process.terminate()
             self.process.wait()
             self.process = None
-            self.finished.emit(f"[Stopped] 子进程 {self.command} 提前结束.")  # 发射任务完成信号
+            self.finished.emit(f"[Stopped] 任务 {self.command} 提前结束.")  # 发射任务完成信号
 
 class MutiWorkThread():
     def __init__(self, table, consol, progressBar, max_threads):
         super().__init__()
         self.table = table
         self.consol = consol
-        self.max_threads = max_threads
+        self.max_threads = int(max_threads)
         self.progressBar = progressBar
         self.finishedTasks = 0
         self.thread_count = 0
         self.thread_queue = queue.Queue()
+        self.test_record = {}
 
+        self.test_pattern = re.compile(r"test=(.+?) ")
         # 存储子进程的 Popen 对象
         self.threads = []
+
+        self.consol.consel(f"设置最大并行任务数 {str(self.max_threads)}", 'black')
 
     def run(self, cmd):
         # 定义要执行的命令列表，每个元素是一个命令字符串
@@ -87,9 +91,9 @@ class MutiWorkThread():
             self.thread_queue.put(item)
 
         while self.thread_count < self.max_threads and self.thread_count < self.thread_queue.qsize():
-            self.thread_count += 1
             cur_cmd = self.thread_queue.get()
             self.creat_thread(cur_cmd)
+            self.thread_count += 1
 
     def creat_thread(self, cmd):
         thread = WorkerThread(cmd)
@@ -98,7 +102,25 @@ class MutiWorkThread():
         self.threads.append(thread)
         thread.start()
 
+        #修改状态标记
+        if not len(self.test_pattern.findall(cmd)):
+            return
+        cur_test = self.test_pattern.findall(cmd)[0].strip()
+        status_item = self.table.item(self.test_record[cur_test], 0)
+        # 创建QPixmap对象并设置图像
+        pixmap = QPixmap(":/ico/loading.png")
+        status_item.setIcon(QIcon(pixmap))
+
     def stop(self):
+        while self.thread_queue.qsize():
+            pending_cmd = self.thread_queue.get()
+            cmd_status = f"[Stopped] 任务 {pending_cmd} 提前结束."
+            self.consol.consel(cmd_status, 'orange')
+            self.tagProcessStatus(cmd_status)
+            self.finishedTasks = self.finishedTasks + 1
+            progress_value = (self.finishedTasks / len(self.threads)) * 100
+            self.progressBar.setValue(int(progress_value))
+
         for thread in self.threads:
             thread.stop()
 
@@ -144,11 +166,10 @@ class MutiWorkThread():
             self.creat_thread(next_cmd)
 
     def tagProcessStatus(self, statusStr):
-        test_pattern = re.compile(r"test=(.+?) ")
         if '[Info]' in statusStr:
             return
 
-        finishedItem = test_pattern.findall(statusStr)[0]
+        finishedItem = self.test_pattern.findall(statusStr)[0]
 
         if '[Success]' in statusStr:
             status = True
@@ -164,8 +185,10 @@ class MutiWorkThread():
                     icon = ":/ico/error.png"
 
                 statusItem = self.table.item(row, 0)
+                check_item = self.table.item(row, 1)
                 pixmap = QPixmap(icon)
                 statusItem.setIcon(QIcon(pixmap))
+                check_item.setFlags(check_item.flags() | Qt.ItemIsUserCheckable)  # add Qt.ItemIsUserCheckable 标志
 
     def checkProcessStatus(self):
         # 监控每个子进程的状态
@@ -184,7 +207,7 @@ class MutiWorkThread():
 
         cmds = []
         for item in selected_items:
-            cmds.append(cmd + ' test=' + item)
+            cmds.append(cmd + ' test=' + item + ' ')
         
         return cmds
 
@@ -193,11 +216,13 @@ class MutiWorkThread():
         selected_items = []
         for row in range(self.table.rowCount()):
             status_item = self.table.item(row, 0)
-            item = self.table.item(row, 1)
-            if item.checkState() == Qt.Checked:
+            check_item = self.table.item(row, 1)
+            if check_item.checkState() == Qt.Checked:
                 selected_items.append(self.table.item(row, 2).text())
+                self.test_record[self.table.item(row, 2).text()] = row
                 # 创建QPixmap对象并设置图像
-                pixmap = QPixmap(":/ico/loading.png")
+                pixmap = QPixmap(":/ico/parcel.png")
                 status_item.setIcon(QIcon(pixmap))
+                check_item.setFlags(check_item.flags() & ~Qt.ItemIsUserCheckable)  # 移除 Qt.ItemIsUserCheckable 标志
 
         return selected_items

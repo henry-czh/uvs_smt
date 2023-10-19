@@ -66,9 +66,11 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.saveDiagEvent = False
         self.simulateCMD = collections.OrderedDict()
         self.simulateCMD = {'clean':None,'build':None,'compiler':None,'elab':None,'sim':None,
-                            'run':None,'multi-lib':None,'gui':None,"fsdb":None,'wave':None,
+                            'run':None,'ml=1':None,'gui=1':None,"fsdb=1":None,'wave':None,
                             'EDA云':None}
 
+        max_threads_list = ['5', '10', '20', '50', '100']
+        self.comboBox_threads.addItems(max_threads_list)
         #self.html_file = os.getenv('HTML_FILE')
         #self.saveDir = os.path.abspath(os.path.join(os.getcwd(), "../config"))
 
@@ -242,6 +244,8 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.pldcompCB_2.stateChanged.connect(self.connectCMDCB)
         self.pld_runCB_2.stateChanged.connect(self.connectCMDCB)
         self.mlCB.stateChanged.connect(self.connectCMDCB)
+        self.guiCB.stateChanged.connect(self.connectCMDCB)
+        self.fsdbCB.stateChanged.connect(self.connectCMDCB)
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     #   xxxxxxxxxx      Functions       xxxxxxxxxxxx
@@ -272,6 +276,7 @@ class MyMainForm(QMainWindow, Ui_smt):
             # 创建一个QCheckBox并将其放入单元格
             checkbox = QTableWidgetItem()
             checkbox.setFlags(checkbox.flags() | Qt.ItemIsUserCheckable)
+            checkbox.setFlags(checkbox.flags() & ~Qt.ItemIsEditable)  # 移除 Qt.ItemIsEditable 标志
             checkbox.setCheckState(Qt.Unchecked)
             self.diag_table.setItem(row, 1, checkbox)
 
@@ -281,7 +286,9 @@ class MyMainForm(QMainWindow, Ui_smt):
                 pixmap = QPixmap(":/ico/checkmark.png")
             else:
                 pixmap = QPixmap(":/ico/null.png")
+            pixmap = pixmap.scaled(500, 500) 
             statusItem.setIcon(QIcon(pixmap))
+            statusItem.setFlags(statusItem.flags() & ~Qt.ItemIsEditable)  # 移除 Qt.ItemIsEditable 标志
             self.diag_table.setItem(row, 0, statusItem)
 
         # 调整列宽以适应内容
@@ -312,7 +319,7 @@ class MyMainForm(QMainWindow, Ui_smt):
 
         self.progressBar.setStyleSheet("")  # 清空样式表
         cmd = self.collectOpts()
-        self.mutiWorkThreads = MutiWorkThread(self.diag_table, self.textBrowser, self.progressBar, 2)
+        self.mutiWorkThreads = MutiWorkThread(self.diag_table, self.textBrowser, self.progressBar, self.comboBox_threads.currentText())
         self.mutiWorkThreads.run(cmd)
 
     #********************************************************
@@ -393,8 +400,16 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.textBrowser.consel('Diag文件保存成功.', 'green')
 
     def selectalltcFunc(self):
-        current_state = self.diag_table.item(0, 1).checkState()
         for row in range(self.diag_table.rowCount()):
+            if self.diag_table.isRowHidden(row):
+                continue
+            current_state = self.diag_table.item(row, 1).checkState()
+            break
+
+        for row in range(self.diag_table.rowCount()):
+            # 判断当前行是否是隐藏的，是则跳过check状态修改
+            if self.diag_table.isRowHidden(row):
+                continue
             item = self.diag_table.item(row, 1)
             if current_state == Qt.Unchecked:
                 item.setCheckState(Qt.Checked)

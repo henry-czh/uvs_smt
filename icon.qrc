@@ -1,5 +1,7 @@
 <RCC>
   <qresource>
+    <file>ico/clock.png</file>
+    <file>ico/parcel.png</file>
     <file>ico/approved.png</file>
     <file>ico/cancel.png</file>
     <file>ico/cbs48.ico</file>

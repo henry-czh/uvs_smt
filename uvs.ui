@@ -340,7 +340,7 @@
                <x>0</x>
                <y>0</y>
                <width>854</width>
-               <height>576</height>
+               <height>574</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -381,11 +381,64 @@
                 <bold>false</bold>
                </font>
               </property>
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
               <property name="text">
                <string>EDA云</string>
               </property>
               <property name="tristate">
                <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_threads">
+              <property name="font">
+               <font>
+                <family>DejaVu Sans Mono</family>
+                <pointsize>9</pointsize>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>最大并行任务数</string>
+              </property>
+              <property name="editable">
+               <bool>true</bool>
+              </property>
+              <property name="currentText">
+               <string/>
+              </property>
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::AdjustToContents</enum>
+              </property>
+              <property name="placeholderText">
+               <string/>
+              </property>
+              <property name="frame">
+               <bool>true</bool>
+              </property>
+              <property name="modelColumn">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_22">
+              <property name="styleSheet">
+               <string notr="true">background-color: rgb(246, 245, 244);</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <property name="text">
+               <string>并行</string>
               </property>
              </widget>
             </item>
@@ -507,10 +560,11 @@
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: rgb(114, 159, 207);</string>
+                   <string notr="true">background-color: rgb(192, 97, 203);
+color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="frameShape">
-                   <enum>QFrame::Box</enum>
+                   <enum>QFrame::Panel</enum>
                   </property>
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
@@ -540,7 +594,7 @@
                 <item row="2" column="4">
                  <widget class="QCheckBox" name="guiCB">
                   <property name="text">
-                   <string>gui</string>
+                   <string>gui=1</string>
                   </property>
                  </widget>
                 </item>
@@ -562,10 +616,11 @@
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: rgb(114, 159, 207);</string>
+                   <string notr="true">background-color: rgb(192, 97, 203);
+color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="frameShape">
-                   <enum>QFrame::Box</enum>
+                   <enum>QFrame::Panel</enum>
                   </property>
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
@@ -581,7 +636,7 @@
                 <item row="2" column="2">
                  <widget class="QCheckBox" name="mlCB">
                   <property name="text">
-                   <string>ml</string>
+                   <string>ml=1</string>
                   </property>
                  </widget>
                 </item>
@@ -603,10 +658,11 @@
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: rgb(114, 159, 207);</string>
+                   <string notr="true">background-color: rgb(192, 97, 203);
+color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="frameShape">
-                   <enum>QFrame::Box</enum>
+                   <enum>QFrame::Panel</enum>
                   </property>
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
@@ -636,7 +692,7 @@
                 <item row="1" column="4">
                  <widget class="QCheckBox" name="fsdbCB">
                   <property name="text">
-                   <string>fsdb</string>
+                   <string>fsdb=1</string>
                   </property>
                  </widget>
                 </item>
@@ -651,10 +707,11 @@
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: rgb(114, 159, 207);</string>
+                   <string notr="true">background-color: rgb(192, 97, 203);
+color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="frameShape">
-                   <enum>QFrame::Box</enum>
+                   <enum>QFrame::Panel</enum>
                   </property>
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
@@ -685,10 +742,11 @@
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">background-color: rgb(114, 159, 207);</string>
+                   <string notr="true">background-color: rgb(192, 97, 203);
+color: rgb(255, 255, 255);</string>
                   </property>
                   <property name="frameShape">
-                   <enum>QFrame::Box</enum>
+                   <enum>QFrame::Panel</enum>
                   </property>
                   <property name="frameShadow">
                    <enum>QFrame::Raised</enum>
@@ -1586,7 +1644,7 @@
              <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
             </property>
             <property name="dragEnabled">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
             <property name="alternatingRowColors">
              <bool>true</bool>
@@ -1721,7 +1779,7 @@
      <x>0</x>
      <y>0</y>
      <width>1245</width>
-     <height>25</height>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
