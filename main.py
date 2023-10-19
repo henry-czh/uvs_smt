@@ -73,6 +73,8 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.comboBox_threads.addItems(max_threads_list)
         #self.html_file = os.getenv('HTML_FILE')
         #self.saveDir = os.path.abspath(os.path.join(os.getcwd(), "../config"))
+        self.result_line_count = 0
+        self.result_max_lines = 10000
 
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Create Console Window
@@ -319,7 +321,8 @@ class MyMainForm(QMainWindow, Ui_smt):
 
         self.progressBar.setStyleSheet("")  # 清空样式表
         cmd = self.collectOpts()
-        self.mutiWorkThreads = MutiWorkThread(self.diag_table, self.textBrowser, self.progressBar, self.comboBox_threads.currentText())
+        #self.mutiWorkThreads = MutiWorkThread(self.diag_table, self.textBrowser, self.progressBar, self.comboBox_threads.currentText())
+        self.mutiWorkThreads = MutiWorkThread(self)
         self.mutiWorkThreads.run(cmd)
 
     #********************************************************
@@ -687,7 +690,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.statusbar.show()
 
         if tool == 'Gvim':
-            cmd = f"gvim --remote-tab-silent {file_name}"
+            cmd = f"gvim {file_name}"
         elif tool == 'vscode':
             cmd = f"code {file_name}"
         elif tool == 'Simvision':

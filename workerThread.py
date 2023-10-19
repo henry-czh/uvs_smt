@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import *
 class WorkerThread(QThread):
     finished = pyqtSignal(str)  # 任务完成信号
     error = pyqtSignal(str)  # 任务完成信号
+    outputReceived = pyqtSignal(str) 
 
     def __init__(self, command):
         super().__init__()
@@ -23,11 +24,19 @@ class WorkerThread(QThread):
     def run(self):
         try:
             # 去除stdout，大量的stdout会塞满PIPE，导致子进程卡死
-            #self.process = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            self.process = subprocess.Popen(self.command, shell=True, stderr=subprocess.PIPE)
+            self.process = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            #self.process = subprocess.Popen(self.command, shell=True, stderr=subprocess.PIPE)
 
             self.task =  f"任务 {self.command} 子进程pid {self.process.pid}"
             self.finished.emit(f"[Info] {self.task} 开始执行.")  # 发射任务完成信号
+
+            while True:
+                output = self.process.stdout.readline()
+                if output.decode('utf-8') == '' and self.process.poll() is not None:
+                    break
+                if output.decode('utf-8'):
+                    self.outputReceived.emit(output.decode('utf-8'))
+
             # 等待子进程完成
             return_code = self.process.wait()  # 等待外部进程执行完成
             if return_code == 0:
@@ -62,12 +71,16 @@ class WorkerThread(QThread):
             self.finished.emit(f"[Stopped] 任务 {self.command} 提前结束.")  # 发射任务完成信号
 
 class MutiWorkThread():
-    def __init__(self, table, consol, progressBar, max_threads):
+    #def __init__(self, table, consol, progressBar, max_threads):
+    def __init__(self, smtui):
         super().__init__()
-        self.table = table
-        self.consol = consol
-        self.max_threads = int(max_threads)
-        self.progressBar = progressBar
+
+        self.table = smtui.diag_table
+        self.consol = smtui.textBrowser
+        self.max_threads = int(smtui.comboBox_threads.currentText())
+        self.progressBar = smtui.progressBar
+        self.resultBrowser = smtui.textBrowser_result
+
         self.finishedTasks = 0
         self.thread_count = 0
         self.thread_queue = queue.Queue()
@@ -77,7 +90,7 @@ class MutiWorkThread():
         # 存储子进程的 Popen 对象
         self.threads = []
 
-        self.consol.consel(f"设置最大并行任务数 {str(self.max_threads)}", 'black')
+        self.consol.consel(f"设置最大并行任务数 {str(self.max_threads)}\n", 'black')
 
     def run(self, cmd):
         # 定义要执行的命令列表，每个元素是一个命令字符串
@@ -99,6 +112,7 @@ class MutiWorkThread():
         thread = WorkerThread(cmd)
         thread.finished.connect(self.taskFinished)
         thread.error.connect(self.taskError)
+        thread.outputReceived.connect(self.taskResult)
         self.threads.append(thread)
         thread.start()
 
@@ -114,7 +128,7 @@ class MutiWorkThread():
     def stop(self):
         while self.thread_queue.qsize():
             pending_cmd = self.thread_queue.get()
-            cmd_status = f"[Stopped] 任务 {pending_cmd} 提前结束."
+            cmd_status = f"[Stopped] 任务 {pending_cmd} 提前结束. \n"
             self.consol.consel(cmd_status, 'orange')
             self.tagProcessStatus(cmd_status)
             self.finishedTasks = self.finishedTasks + 1
@@ -164,6 +178,23 @@ class MutiWorkThread():
         if not self.thread_queue.empty():
             next_cmd = self.thread_queue.get()
             self.creat_thread(next_cmd)
+
+    def taskResult(self, result):
+        ## 检查当前行数是否超过上限
+        #if self.result_line_count >= self.result_max_lines:
+        #    # 删除旧的行，保留最新的行
+        #    cursor = self.resultBrowser.textCursor()
+        #    cursor.movePosition(QTextCursor.Start)
+        #    cursor.movePosition(QTextCursor.Down, QTextCursor.KeepAnchor, self.result_line_count - self.result_max_lines)
+        #    cursor.removeSelectedText()
+        #    self.result_line_count = self.result_max_lines - 1
+
+        cursor = self.resultBrowser.textCursor()
+        cursor.movePosition(QTextCursor.End)
+        cursor.insertText(result)
+        #self.result_line_count += 1
+        self.resultBrowser.setTextCursor(cursor)
+        self.resultBrowser.ensureCursorVisible()
 
     def tagProcessStatus(self, statusStr):
         if '[Info]' in statusStr:

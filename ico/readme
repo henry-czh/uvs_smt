@@ -1,6 +1,17 @@
 https://www.flaticon.com/icon-fonts-most-downloaded/2
 
-TODO:
+finihed:
 1. 全选按钮应该只选择显示的部分(过滤后的部分)；
 2. workerThread中增加一个testcase名与thread的对应关系，记录具体任务的完成情况，包括pending、running、stoped、error；
-3. 刷新按钮应该保持自打开界面以来，run过的testcase的执行结果，至到重新run或者重启界面；
+
+canceled:
+1. 刷新按钮应该保持自打开界面以来，run过的testcase的执行结果，至到重新run或者重启界面； - 增加刷新按钮提示信息，原功能保持不变；
+
+TODO:
+1. 新增任务到进程池，同步处理进度条、运行状态等信息；
+2. 单独删除某个pending、runnning状态的任务：
+3. 新增UVS环境配置界面、包含各种路径和工具，协助快速完成环境搭建和维护；
+4. UVS个仓库管理与维护界面；
+5. 项目信息汇总界面；
+6. 集成各种 工具的命令、参数，实际部署测试；
+7. subprocess的sdout接管；
