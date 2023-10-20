@@ -40,6 +40,8 @@ class ColoredTextBrowser(QTextBrowser):
     def tips(self):
         # 获取当前文本光标
         self.cursor = self.textCursor()
+        self.cursor.movePosition(QTextCursor.End)
+        self.setTextCursor(self.cursor)
 
         # 创建文本字符格式，设置颜色
         char_format = QTextCharFormat()

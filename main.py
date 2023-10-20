@@ -203,6 +203,11 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.diag_table.customContextMenuRequested.connect(self.diagTableContextMenu)
 
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
+        # 创建线程池
+        #+++++++++++++++++++++++++++++++++++++++++++++++++++++
+        self.mutiWorkThreads = MutiWorkThread(self)
+
+        #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Set statusbar information
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         self.statusbar.showMessage('如有疑问, 请联系 chaozhanghu@phytium.com.cn  @Qsmtool 23.09-0001', 0)
@@ -319,11 +324,13 @@ class MyMainForm(QMainWindow, Ui_smt):
             self.textBrowser.consel('上次发布的任务还没有结束，需要发布新任务，请等待或开新的SMT窗口.', 'red')
             return
 
-        self.progressBar.setStyleSheet("")  # 清空样式表
+        #self.progressBar.setStyleSheet("")  # 清空样式表
         cmd = self.collectOpts()
-        #self.mutiWorkThreads = MutiWorkThread(self.diag_table, self.textBrowser, self.progressBar, self.comboBox_threads.currentText())
-        self.mutiWorkThreads = MutiWorkThread(self)
         self.mutiWorkThreads.run(cmd)
+
+    def SingleRunSimulate(self):
+        cmd = self.collectOpts()
+        self.mutiWorkThreads.singleRun(cmd)
 
     #********************************************************
     # 运行仿真：1. 收集参数；
@@ -364,6 +371,15 @@ class MyMainForm(QMainWindow, Ui_smt):
     # 重新加载diag文件
     #********************************************************
     def reloadDiagFunc(self):
+        current_progress = self.progressBar.value()
+        if current_progress > 0 and current_progress < 100:
+            self.textBrowser.consel('上次发布的任务还没有结束, 暂时无法执行刷新操作.', 'red')
+            return
+
+        self.mutiWorkThreads = MutiWorkThread(self)
+        self.progressBar.setValue(0)
+        self.progressBar.setStyleSheet("")  # 清空样式表
+
         self.reloadDiagEvent = True
         self.textBrowser.consel("刷新diag表信息.","green")
         self.diag_table.setSortingEnabled(False)
@@ -486,7 +502,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         action_edit.triggered.connect(self.editTableItem)
         action_delete.triggered.connect(self.deleteTableItem)
         action_add.triggered.connect(self.addTableItem)
-        action_run.triggered.connect(self.runSimulate)
+        action_run.triggered.connect(self.SingleRunSimulate)
         action_config.triggered.connect(self.showTableConfig)
         action_stimuli.triggered.connect(self.showSource)
         action_testbench.triggered.connect(self.showTB)
