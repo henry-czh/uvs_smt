@@ -253,6 +253,8 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.mlCB.stateChanged.connect(self.connectCMDCB)
         self.guiCB.stateChanged.connect(self.connectCMDCB)
         self.fsdbCB.stateChanged.connect(self.connectCMDCB)
+        self.coverCB.stateChanged.connect(self.connectCMDCB)
+        self.verdiCB.stateChanged.connect(self.connectCMDCB)
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     #   xxxxxxxxxx      Functions       xxxxxxxxxxxx
@@ -500,9 +502,22 @@ class MyMainForm(QMainWindow, Ui_smt):
 
         # 连接菜单项的槽函数
         action_edit.triggered.connect(self.editTableItem)
-        action_delete.triggered.connect(self.deleteTableItem)
+
+        icon = QIcon()
+        icon.addPixmap(QPixmap(":/ico/new_doc.png"), QIcon.Normal, QIcon.Off)
+        action_add.setIcon(icon)
         action_add.triggered.connect(self.addTableItem)
+
+        icon1 = QIcon()
+        icon1.addPixmap(QPixmap(":/ico/trash.png"), QIcon.Normal, QIcon.Off)
+        action_delete.setIcon(icon1)
+        action_delete.triggered.connect(self.deleteTableItem)
+
         action_run.triggered.connect(self.SingleRunSimulate)
+        icon3 = QIcon()
+        icon3.addPixmap(QPixmap(":/ico/play-button.png"), QIcon.Normal, QIcon.Off)
+        action_run.setIcon(icon3)
+
         action_config.triggered.connect(self.showTableConfig)
         action_stimuli.triggered.connect(self.showSource)
         action_testbench.triggered.connect(self.showTB)

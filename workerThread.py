@@ -56,17 +56,19 @@ class WorkerThread(QThread):
                 self.error.emit(error_info)
         except Exception as e:
             # 发射错误信息信号
-            self.error.emit(f"任务发布失败: {str(e)} \n")
+            self.error.emit(f"任务执行失败: {str(e)} \n")
 
     def stop(self):
-        if hasattr(self, "process") and self.process.poll() is None:
+        if hasattr(self, "process") and self.process is None:
+            return
+        if self.process.poll() is None:
             parent = psutil.Process(self.process.pid)
             for child in parent.children(recursive=True):
                 child.terminate()
             # 终止 subprocess 进程
             self.process.terminate()
             self.process.wait()
-            self.process = None
+            #self.process = None
             self.finished.emit(f"[Stopped] 任务 {self.command} 提前结束.")  # 发射任务完成信号
 
 class MutiWorkThread():
@@ -147,19 +149,21 @@ class MutiWorkThread():
         status_item.setIcon(QIcon(pixmap))
 
     def stop(self):
+        stop_pendings = []
         while self.thread_queue.qsize():
             pending_cmd = self.thread_queue.get()
             cmd_status = f"[Stopped] 任务 {pending_cmd} 提前结束. \n"
-            self.consol.consel(cmd_status, 'orange')
+            stop_pendings.append(cmd_status)
 
-            self.tagProcessStatus(cmd_status)
+        for item in stop_pendings:
+            self.consol.consel(item, 'orange')
 
-            self.finishedTasks = self.finishedTasks + 1
+            self.tagProcessStatus(item)
+
             self.updateProgress()
 
         for thread in self.threads:
-            if thread.poll() is not None:
-                thread.stop()
+            thread.stop()
 
     def taskFinished(self, testcaseStr):
         if '[Success]' in testcaseStr:
@@ -174,7 +178,7 @@ class MutiWorkThread():
 
         self.tagProcessStatus(testcaseStr)
 
-        if status == 'black':
+        if status == 'black' or status == 'orange':
             return
 
         self.finishedTasks = self.finishedTasks + 1
@@ -188,28 +192,21 @@ class MutiWorkThread():
     def taskError(self, error_info):
         self.consol.consel(error_info, 'red')
 
-        #self.finishedTasks = self.finishedTasks + 1
-        #self.updateProgress()
-        #self.progressBar.setStyleSheet(self.error_style)
-        
-        ## 启动下一个补位的thread
-        #if not self.thread_queue.empty():
-        #    next_cmd = self.thread_queue.get()
-        #    self.creat_thread(next_cmd)
-
     def updateProgress(self):
         if self.progressBar.value() == 0:
             self.progressBar.setValue(1)
             self.progressBar.setStyleSheet(self.finished_style)
 
+        self.progressBar.setStyleSheet(self.finished_style)
         for key,value in self.task_status_record.items():
             if not value:
                 self.progressBar.setStyleSheet(self.error_style)
-            else:
-                self.progressBar.setStyleSheet(self.finished_style)
 
         progress_value = (self.finishedTasks / len(self.threads)) * 100
-        self.progressBar.setValue(int(progress_value))
+        if progress_value:
+            self.progressBar.setValue(int(progress_value))
+        else:
+            self.progressBar.setValue(1)
 
     def taskResult(self, result):
         ## 检查当前行数是否超过上限
@@ -239,15 +236,15 @@ class MutiWorkThread():
         else:
             status = False 
 
+        self.task_status_record[finishedItem] = status
+
         for row in range(self.table.rowCount()):
             matchedItem = self.table.item(row, 2)
             if finishedItem == matchedItem.text():
                 if status:
                     icon = ":/ico/check-mark.png"
-                    self.task_status_record[finishedItem] = True
                 else:
                     icon = ":/ico/error.png"
-                    self.task_status_record[finishedItem] = False
 
                 statusItem = self.table.item(row, 0)
                 check_item = self.table.item(row, 1)
