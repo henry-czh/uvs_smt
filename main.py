@@ -369,6 +369,9 @@ class MyMainForm(QMainWindow, Ui_smt):
     def stopSimuateFunc(self):
         self.mutiWorkThreads.stop()
 
+    def singleStopSimulateFunc(self):
+        self.mutiWorkThreads.singleStop()
+
     #********************************************************
     # 重新加载diag文件
     #********************************************************
@@ -494,7 +497,8 @@ class MyMainForm(QMainWindow, Ui_smt):
         action_edit     = QAction("编辑", self)
         action_delete   = QAction("删除", self)
         action_add      = QAction("新增", self)
-        action_run      = QAction("运行", self)
+        action_run      = QAction("立即运行", self)
+        action_stop     = QAction("立即停止", self)
         action_config   = QAction("查看配置详情", self)
         action_stimuli  = QAction("查看激励详情", self)
         action_simdir   = QAction("查看运行结果", self)
@@ -518,6 +522,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         icon3.addPixmap(QPixmap(":/ico/play-button.png"), QIcon.Normal, QIcon.Off)
         action_run.setIcon(icon3)
 
+        action_stop.triggered.connect(self.singleStopSimulateFunc)
         action_config.triggered.connect(self.showTableConfig)
         action_stimuli.triggered.connect(self.showSource)
         action_testbench.triggered.connect(self.showTB)
@@ -527,6 +532,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         #context_menu.addAction(action_edit)
         context_menu.addAction(action_add)
         context_menu.addAction(action_run)
+        context_menu.addAction(action_stop)
         context_menu.addAction(action_delete)
         context_menu.addAction(action_config)
         context_menu.addAction(action_stimuli)

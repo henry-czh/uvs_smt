@@ -83,8 +83,9 @@ class MutiWorkThread():
 
         self.finishedTasks = 0
         self.thread_queue = queue.Queue()
-        self.test_record = {}
-        self.task_status_record = {}
+        self.task_record_row = {}
+        self.task_record_status = {}
+        self.task_record_running= {}
 
         self.test_pattern = re.compile(r"test=(.+?) ")
         # 存储子进程的 Popen 对象
@@ -99,15 +100,16 @@ class MutiWorkThread():
         self.finished_style += "QProgressBar { text-align: center; }"  # 设置文本居中
 
     def singleRun(self, cmd):
-        commands = self.collectSingleRunCMDs(cmd)
-        self.consol.consel(f"新增任务到进程池，该操作将扩展 {len(commands)} 并行进程数. \n", 'black')
+        testcases = self.collectSingleRunCMDs(True)
+        self.consol.consel(f"新增任务到进程池，该操作将扩展 {len(testcases)} 并行进程数. \n", 'black')
 
-        for item in commands:
-            self.creat_thread(item)
+        for item in testcases:
+            self.creat_thread(item, cmd)
 
         self.updateProgress()
 
     def run(self, cmd):
+        self.multirun_cmd = cmd
         self.max_threads = int(self.smtui.comboBox_threads.currentText())
         self.consol.consel(f"设置最大并行任务数 {str(self.max_threads)}\n", 'black')
         self.thread_count = 0
@@ -117,42 +119,58 @@ class MutiWorkThread():
         self.consol.consel(f"finished:{self.finishedTasks}\n",'black')
         self.consol.consel(f"threads:{len(self.threads)}\n",'black')
         # 定义要执行的命令列表，每个元素是一个命令字符串
-        self.commands = self.collectCMDs(cmd)
+        self.commands = self.collectCMDs()
         
         # 启动子进程并存储 Popen 对象
         for item in self.commands:
             self.thread_queue.put(item)
 
         while self.thread_count < self.max_threads and self.thread_count <= self.thread_queue.qsize():
-            cur_cmd = self.thread_queue.get()
-            self.creat_thread(cur_cmd)
+            cur_testcase = self.thread_queue.get()
+            self.creat_thread(cur_testcase, self.multirun_cmd)
             self.thread_count += 1
 
         # update progress bar
         self.updateProgress()
 
-    def creat_thread(self, cmd):
+    def creat_thread(self, testcase, cmd):
+        cmd += ' test=' + testcase + ' '
         thread = WorkerThread(cmd)
         thread.finished.connect(self.taskFinished)
         thread.error.connect(self.taskError)
         thread.outputReceived.connect(self.taskResult)
-        self.threads.append(thread)
+        self.threads.append([thread,testcase])
         thread.start()
 
-        #修改状态标记
-        if not len(self.test_pattern.findall(cmd)):
-            return
-        cur_test = self.test_pattern.findall(cmd)[0].strip()
-        status_item = self.table.item(self.test_record[cur_test], 0)
+        # 找到在table中的对应item，修改状态
+        status_item = self.table.item(self.task_record_row[testcase], 0)
         # 创建QPixmap对象并设置图像
         pixmap = QPixmap(":/ico/loading.png")
         status_item.setIcon(QIcon(pixmap))
+
+    def singleStop(self):
+        testcases = self.collectSingleRunCMDs(False)
+        for testcase in testcases:
+            for thread in self.threads:
+                if thread[1] == testcase:
+                    thread[0].stop
+            # 搜索等待队列，找到删除它
+            queue_size = self.thread_queue.qsize()
+            for _ in range(queue_size):
+                item = self.thread_queue.get()
+                if item == testcase:
+                    cmd_status = f"[Stopped] 等待运行的任务 test={testcase} 被取消. \n"
+                    self.consol.consel(cmd_status, 'orange')
+                    self.tagProcessStatus(cmd_status)
+                    self.updateProgress()
+                else:
+                    self.thread_queue.put(item)
 
     def stop(self):
         stop_pendings = []
         while self.thread_queue.qsize():
             pending_cmd = self.thread_queue.get()
-            cmd_status = f"[Stopped] 任务 {pending_cmd} 提前结束. \n"
+            cmd_status = f"[Stopped] 等待运行的任务 test={pending_cmd} 被取消. \n"
             stop_pendings.append(cmd_status)
 
         for item in stop_pendings:
@@ -163,7 +181,7 @@ class MutiWorkThread():
             self.updateProgress()
 
         for thread in self.threads:
-            thread.stop()
+            thread[0].stop()
 
     def taskFinished(self, testcaseStr):
         if '[Success]' in testcaseStr:
@@ -186,8 +204,8 @@ class MutiWorkThread():
 
         # 启动下一个补位的thread
         if not self.thread_queue.empty():
-            next_cmd = self.thread_queue.get()
-            self.creat_thread(next_cmd)
+            next_testcase = self.thread_queue.get()
+            self.creat_thread(next_testcase, self.multirun_cmd)
 
     def taskError(self, error_info):
         self.consol.consel(error_info, 'red')
@@ -198,7 +216,7 @@ class MutiWorkThread():
             self.progressBar.setStyleSheet(self.finished_style)
 
         self.progressBar.setStyleSheet(self.finished_style)
-        for key,value in self.task_status_record.items():
+        for key,value in self.task_record_status.items():
             if not value:
                 self.progressBar.setStyleSheet(self.error_style)
 
@@ -236,7 +254,8 @@ class MutiWorkThread():
         else:
             status = False 
 
-        self.task_status_record[finishedItem] = status
+        self.task_record_status[finishedItem] = status
+        self.task_record_running[finishedItem] = False
 
         for row in range(self.table.rowCount()):
             matchedItem = self.table.item(row, 2)
@@ -252,20 +271,19 @@ class MutiWorkThread():
                 statusItem.setIcon(QIcon(pixmap))
                 check_item.setFlags(check_item.flags() | Qt.ItemIsUserCheckable)  # add Qt.ItemIsUserCheckable 标志
 
-    def checkProcessStatus(self):
-        # 监控每个子进程的状态
-        for i, thread in enumerate(self.threads):
-            return_code = thread.process.poll()  # 获取子进程的返回码
+    #def checkProcessStatus(self):
+    #    # 监控每个子进程的状态
+    #    for i, thread in enumerate(self.threads):
+    #        return_code = thread.process.poll()  # 获取子进程的返回码
 
-            if return_code is None:
-                self.consol.consel(f"子进程 {self.commands[i]}: 仍在运行", 'black')
-            elif return_code == 0:
-                self.consol.consel(f"子进程 {self.commands[i]}: 执行成功", 'green')
-            else:
-                self.consol.consel(f"子进程 {self.commands[i]}: 执行失败 (返回码 {return_code}", 'black')
+    #        if return_code is None:
+    #            self.consol.consel(f"子进程 {self.commands[i]}: 仍在运行", 'black')
+    #        elif return_code == 0:
+    #            self.consol.consel(f"子进程 {self.commands[i]}: 执行成功", 'green')
+    #        else:
+    #            self.consol.consel(f"子进程 {self.commands[i]}: 执行失败 (返回码 {return_code}", 'black')
     
-    def collectSingleRunCMDs(self, cmd):
-        cmds = []
+    def collectSingleRunCMDs(self, forrun):
         selected_items = []
         # 新增一行并复制当前选中的行
         selected_rows = set()
@@ -273,35 +291,37 @@ class MutiWorkThread():
             selected_rows.add(item.row())
         
         for row in selected_rows:
-            selected_items.append(self.table.item(row, 2).text())
-            self.test_record[self.table.item(row, 2).text()] = row
+            selected_item = self.table.item(row, 2).text()
+            if selected_item in self.task_record_running and self.task_record_running[selected_item] and forrun:
+                self.consol.consel(f"Task {selected_item} 已经在运行, 先stop它或者wait它.\n",'orange')
+                continue
+            else:
+                selected_items.append(selected_item)
+                # 记录开始run的task
+                self.task_record_row[selected_item] = row
+                self.task_record_running[selected_item] = True
 
-        for item in selected_items:
-            cmds.append(cmd + ' test=' + item + ' ')
-        
-        return cmds
+        return selected_items
 
-    def collectCMDs(self, cmd):
-        selected_items = self.collectItems()
-
-        cmds = []
-        for item in selected_items:
-            cmds.append(cmd + ' test=' + item + ' ')
-        
-        return cmds
-
-    def collectItems(self):
+    def collectCMDs(self):
         # 遍历表格的行
         selected_items = []
         for row in range(self.table.rowCount()):
             status_item = self.table.item(row, 0)
             check_item = self.table.item(row, 1)
             if check_item.checkState() == Qt.Checked:
-                selected_items.append(self.table.item(row, 2).text())
-                self.test_record[self.table.item(row, 2).text()] = row
-                # 创建QPixmap对象并设置图像
-                pixmap = QPixmap(":/ico/parcel.png")
-                status_item.setIcon(QIcon(pixmap))
-                check_item.setFlags(check_item.flags() & ~Qt.ItemIsUserCheckable)  # 移除 Qt.ItemIsUserCheckable 标志
+                selected_item = self.table.item(row, 2).text()
+                if selected_item in self.task_record_running and self.task_record_running[selected_item]:
+                    self.consol.consel(f"Task {selected_item} 已经在运行, 先stop它或者wait它.\n",'orange')
+                    continue
+                else:
+                    selected_items.append(selected_item)
+                    # 记录开始run的task
+                    self.task_record_row[selected_item] = row
+                    self.task_record_running[selected_item] = True
+                    # 创建QPixmap对象并设置图像
+                    pixmap = QPixmap(":/ico/parcel.png")
+                    status_item.setIcon(QIcon(pixmap))
+                    check_item.setFlags(check_item.flags() & ~Qt.ItemIsUserCheckable)  # 移除 Qt.ItemIsUserCheckable 标志
 
         return selected_items
