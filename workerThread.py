@@ -101,7 +101,8 @@ class MutiWorkThread():
 
     def singleRun(self, cmd):
         testcases = self.collectSingleRunCMDs(True)
-        self.consol.consel(f"新增任务到进程池，该操作将扩展 {len(testcases)} 并行进程数. \n", 'black')
+        if len(testcases):
+            self.consol.consel(f"新增任务到进程池，该操作将扩展 {len(testcases)} 并行进程数. \n", 'black')
 
         for item in testcases:
             self.creat_thread(item, cmd)
@@ -151,9 +152,6 @@ class MutiWorkThread():
     def singleStop(self):
         testcases = self.collectSingleRunCMDs(False)
         for testcase in testcases:
-            for thread in self.threads:
-                if thread[1] == testcase:
-                    thread[0].stop
             # 搜索等待队列，找到删除它
             queue_size = self.thread_queue.qsize()
             for _ in range(queue_size):
@@ -165,6 +163,11 @@ class MutiWorkThread():
                     self.updateProgress()
                 else:
                     self.thread_queue.put(item)
+
+            for thread in self.threads:
+                if thread[1] == testcase:
+                    thread[0].stop()
+
 
     def stop(self):
         stop_pendings = []
@@ -297,9 +300,14 @@ class MutiWorkThread():
                 continue
             else:
                 selected_items.append(selected_item)
-                # 记录开始run的task
-                self.task_record_row[selected_item] = row
-                self.task_record_running[selected_item] = True
+                if forrun:
+                    # 记录开始run的task
+                    self.task_record_row[selected_item] = row
+                    self.task_record_running[selected_item] = True
+                    item = self.table.item(row, 1)
+                    current_state = item.checkState()
+                    if current_state == Qt.Unchecked:
+                        item.setCheckState(Qt.Checked)
 
         return selected_items
 

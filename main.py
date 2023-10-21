@@ -255,6 +255,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.fsdbCB.stateChanged.connect(self.connectCMDCB)
         self.coverCB.stateChanged.connect(self.connectCMDCB)
         self.verdiCB.stateChanged.connect(self.connectCMDCB)
+        self.quitCB.stateChanged.connect(self.connectCMDCB)
 
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     #   xxxxxxxxxx      Functions       xxxxxxxxxxxx
@@ -475,6 +476,27 @@ class MyMainForm(QMainWindow, Ui_smt):
             return False
 
     #********************************************************
+    # 删除table项确认菜单
+    #********************************************************
+    def delete_dialog(self):
+        # 创建一个确认对话框
+        confirm_dialog = QMessageBox()
+        confirm_dialog.setIcon(QMessageBox.Question)
+        confirm_dialog.setWindowTitle("确认删除testcase")
+        confirm_dialog.setText("是否确定删除该testcase? 如正在运行, 进程将被kill.")
+        confirm_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        confirm_dialog.setDefaultButton(QMessageBox.No)
+
+        # 显示对话框并等待用户的选择
+        user_choice = confirm_dialog.exec_()
+
+        # 根据用户的选择返回True或False
+        if user_choice == QMessageBox.Yes:
+            return True
+        else:
+            return False
+
+    #********************************************************
     # 过滤table中的项
     #********************************************************
     def filterTable(self):
@@ -522,6 +544,9 @@ class MyMainForm(QMainWindow, Ui_smt):
         icon3.addPixmap(QPixmap(":/ico/play-button.png"), QIcon.Normal, QIcon.Off)
         action_run.setIcon(icon3)
 
+        icon4 = QIcon()
+        icon4.addPixmap(QPixmap(":/ico/pause.png"), QIcon.Normal, QIcon.Off)
+        action_stop.setIcon(icon4)
         action_stop.triggered.connect(self.singleStopSimulateFunc)
         action_config.triggered.connect(self.showTableConfig)
         action_stimuli.triggered.connect(self.showSource)
@@ -648,6 +673,13 @@ class MyMainForm(QMainWindow, Ui_smt):
             item.setText("编辑后的内容")
 
     def deleteTableItem(self):
+        conform = self.delete_dialog()
+        if not conform:
+            return
+
+        # 关闭正在进行的进程
+        self.singleStopSimulateFunc()
+
         # 删除选定的行
         selected_rows = set()
         for item in self.diag_table.selectedItems():

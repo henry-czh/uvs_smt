@@ -1,14 +1,14 @@
 ifeq ($(test),testcase0)
-	delay = 5
+	delay = 50
 else ifeq ($(test),testcase1)
-	delay = 10
+	delay = 20
 else ifeq ($(test),testcase2)
-	delay = 10
+	delay = 20
 else ifeq ($(test),testcase3)
-	delay =  15
+	delay =  50
 	error = sleep error
 else
-	delay = 3
+	delay = 10
 endif
 
 clean:
