@@ -170,8 +170,10 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.diag_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         # 隐藏行序号
         self.diag_table.verticalHeader().setVisible(False)
+        # 关闭自动sorting功能，只在点击header时sorting
+        self.diag_table.setSortingEnabled(False)
         # 连接表头点击信号
-        #self.diag_table.horizontalHeader().sectionClicked.connect(self.onHeaderClicked)
+        self.diag_table.horizontalHeader().sectionClicked.connect(self.onHeaderClicked)
 
         # 设置表头标签
         self.diag_table.setColumnCount(10)
@@ -285,6 +287,7 @@ class MyMainForm(QMainWindow, Ui_smt):
 
             # 创建一个QCheckBox并将其放入单元格
             checkbox = QTableWidgetItem()
+            checkbox.setText(' ')
             checkbox.setFlags(checkbox.flags() | Qt.ItemIsUserCheckable)
             checkbox.setFlags(checkbox.flags() & ~Qt.ItemIsEditable)  # 移除 Qt.ItemIsEditable 标志
             checkbox.setCheckState(Qt.Unchecked)
@@ -294,9 +297,10 @@ class MyMainForm(QMainWindow, Ui_smt):
             statusItem = QTableWidgetItem()
             if path_exist:
                 pixmap = QPixmap(":/ico/checkmark.png")
+                statusItem.setText(' ')
             else:
                 pixmap = QPixmap(":/ico/null.png")
-            pixmap = pixmap.scaled(500, 500) 
+                statusItem.setText(' '*2)
             statusItem.setIcon(QIcon(pixmap))
             statusItem.setFlags(statusItem.flags() & ~Qt.ItemIsEditable)  # 移除 Qt.ItemIsEditable 标志
             self.diag_table.setItem(row, 0, statusItem)
@@ -304,10 +308,25 @@ class MyMainForm(QMainWindow, Ui_smt):
         # 调整列宽以适应内容
         self.diag_table.resizeColumnsToContents()
 
+    def onHeaderClicked(self, logicalIndex):
+        # 在表头点击时启用排序功能，否则禁用
+        if self.diag_table.isSortingEnabled():
+            self.diag_table.setSortingEnabled(False)
+        else:
+            self.diag_table.setSortingEnabled(True)
+            # 执行排序
+            self.diag_table.sortItems(logicalIndex)
+
     #********************************************************
     # 当diag table发生编辑时，触发相关函数 1. 改变背景颜色；
     #********************************************************
     def handleItemChanged(self, item):
+        if item.column() == 1:
+            if item.checkState() == Qt.Unchecked:
+                item.setText(' ')
+            else:
+                item.setText(' '*2)
+
         if item and item.column() < 2:
             return
 
@@ -388,12 +407,12 @@ class MyMainForm(QMainWindow, Ui_smt):
 
         self.reloadDiagEvent = True
         self.textBrowser.consel("刷新diag表信息.","green")
-        self.diag_table.setSortingEnabled(False)
+        #self.diag_table.setSortingEnabled(False)
         self.diag_table.clearContents()
         self.diag_table.setRowCount(0)
         self.fillDataForTable()
         self.diag_table.repaint()
-        self.diag_table.setSortingEnabled(True)
+        #self.diag_table.setSortingEnabled(True)
         self.reloadDiagEvent = False
 
         # 调整列宽以适应内容
@@ -438,8 +457,10 @@ class MyMainForm(QMainWindow, Ui_smt):
             item = self.diag_table.item(row, 1)
             if current_state == Qt.Unchecked:
                 item.setCheckState(Qt.Checked)
+                item.setText(' '*2)
             else:
                 item.setCheckState(Qt.Unchecked)
+                item.setText(' ')
 
     #********************************************************
     # 自定义关闭串口前的动作
@@ -727,11 +748,13 @@ class MyMainForm(QMainWindow, Ui_smt):
             checkbox = QTableWidgetItem()
             checkbox.setFlags(checkbox.flags() | Qt.ItemIsUserCheckable)
             checkbox.setCheckState(Qt.Unchecked)
+            checkbox.setText(' ')
             self.diag_table.setItem(new_row, 1, checkbox)
 
             # 设置元格Item
             statusItem = QTableWidgetItem()
             pixmap = QPixmap(":/ico/null.png")
+            statusItem.setText(' '*2)
             statusItem.setIcon(QIcon(pixmap))
             self.diag_table.setItem(new_row, 0, statusItem)
 

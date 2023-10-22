@@ -83,7 +83,6 @@ class MutiWorkThread():
 
         self.finishedTasks = 0
         self.thread_queue = queue.Queue()
-        self.task_record_row = {}
         self.task_record_status = {}
         self.task_record_running= {}
 
@@ -144,9 +143,11 @@ class MutiWorkThread():
         thread.start()
 
         # 找到在table中的对应item，修改状态
-        status_item = self.table.item(self.task_record_row[testcase], 0)
+        row = self.findTestcaseRow(testcase)
+        status_item = self.table.item(row, 0)
         # 创建QPixmap对象并设置图像
         pixmap = QPixmap(":/ico/loading.png")
+        status_item.setText(' '*3)
         status_item.setIcon(QIcon(pixmap))
 
     def singleStop(self):
@@ -223,7 +224,8 @@ class MutiWorkThread():
             if not value:
                 self.progressBar.setStyleSheet(self.error_style)
 
-        progress_value = (self.finishedTasks / len(self.threads)) * 100
+        total_tasks = len(self.threads) + self.thread_queue.qsize()
+        progress_value = (self.finishedTasks / total_tasks) * 100
         if progress_value:
             self.progressBar.setValue(int(progress_value))
         else:
@@ -251,40 +253,32 @@ class MutiWorkThread():
             return
 
         finishedItem = self.test_pattern.findall(statusStr)[0]
+        row = self.findTestcaseRow(finishedItem)
+        statusItem = self.table.item(row, 0)
 
-        if '[Success]' in statusStr:
-            status = True
-        else:
-            status = False 
-
-        self.task_record_status[finishedItem] = status
         self.task_record_running[finishedItem] = False
 
+        if '[Success]' in statusStr:
+            self.task_record_status[finishedItem] = True
+            icon = ":/ico/check-mark.png"
+            statusItem.setText(' '*4)
+        else:
+            self.task_record_status[finishedItem] = False
+            icon = ":/ico/error.png"
+            statusItem.setText(' '*5)
+
+        pixmap = QPixmap(icon)
+        statusItem.setIcon(QIcon(pixmap))
+
+        check_item = self.table.item(row, 1)
+        check_item.setFlags(check_item.flags() | Qt.ItemIsUserCheckable)  # add Qt.ItemIsUserCheckable 标志
+
+    def findTestcaseRow(self, testcase):
         for row in range(self.table.rowCount()):
-            matchedItem = self.table.item(row, 2)
-            if finishedItem == matchedItem.text():
-                if status:
-                    icon = ":/ico/check-mark.png"
-                else:
-                    icon = ":/ico/error.png"
+            if testcase == self.table.item(row, 2).text():
+                return row
 
-                statusItem = self.table.item(row, 0)
-                check_item = self.table.item(row, 1)
-                pixmap = QPixmap(icon)
-                statusItem.setIcon(QIcon(pixmap))
-                check_item.setFlags(check_item.flags() | Qt.ItemIsUserCheckable)  # add Qt.ItemIsUserCheckable 标志
-
-    #def checkProcessStatus(self):
-    #    # 监控每个子进程的状态
-    #    for i, thread in enumerate(self.threads):
-    #        return_code = thread.process.poll()  # 获取子进程的返回码
-
-    #        if return_code is None:
-    #            self.consol.consel(f"子进程 {self.commands[i]}: 仍在运行", 'black')
-    #        elif return_code == 0:
-    #            self.consol.consel(f"子进程 {self.commands[i]}: 执行成功", 'green')
-    #        else:
-    #            self.consol.consel(f"子进程 {self.commands[i]}: 执行失败 (返回码 {return_code}", 'black')
+        return -1
     
     def collectSingleRunCMDs(self, forrun):
         selected_items = []
@@ -302,12 +296,12 @@ class MutiWorkThread():
                 selected_items.append(selected_item)
                 if forrun:
                     # 记录开始run的task
-                    self.task_record_row[selected_item] = row
                     self.task_record_running[selected_item] = True
                     item = self.table.item(row, 1)
                     current_state = item.checkState()
                     if current_state == Qt.Unchecked:
                         item.setCheckState(Qt.Checked)
+                        item.setText(' '*2)
 
         return selected_items
 
@@ -325,11 +319,23 @@ class MutiWorkThread():
                 else:
                     selected_items.append(selected_item)
                     # 记录开始run的task
-                    self.task_record_row[selected_item] = row
                     self.task_record_running[selected_item] = True
                     # 创建QPixmap对象并设置图像
                     pixmap = QPixmap(":/ico/parcel.png")
+                    status_item.setText(' '*6)
                     status_item.setIcon(QIcon(pixmap))
                     check_item.setFlags(check_item.flags() & ~Qt.ItemIsUserCheckable)  # 移除 Qt.ItemIsUserCheckable 标志
 
         return selected_items
+
+    #def checkProcessStatus(self):
+    #    # 监控每个子进程的状态
+    #    for i, thread in enumerate(self.threads):
+    #        return_code = thread.process.poll()  # 获取子进程的返回码
+
+    #        if return_code is None:
+    #            self.consol.consel(f"子进程 {self.commands[i]}: 仍在运行", 'black')
+    #        elif return_code == 0:
+    #            self.consol.consel(f"子进程 {self.commands[i]}: 执行成功", 'green')
+    #        else:
+    #            self.consol.consel(f"子进程 {self.commands[i]}: 执行失败 (返回码 {return_code}", 'black')
