@@ -21,6 +21,7 @@ class DiagTable():
         self.mutiWorkThreads = smtui.mutiWorkThreads 
         self.treeView_filebrowser = smtui.treeView_filebrowser 
         self.dir_model = smtui.dir_model
+        self.lineEdit = smtui.lineEdit
 
         self.reloadDiagEvent = False
         self.saveDiagEvent = False
@@ -337,8 +338,21 @@ class DiagTable():
 
             # 将最后一级目录设置为选中状态
             self.treeView_filebrowser.setCurrentIndex(current_index)
+            self.treeView_filebrowser.scrollTo(current_index)
         else:
             self.textBrowser.consel("路径不存在: %s" % (subdir), 'red')
+
+    ##********************************************************
+    ## 过滤table中的项
+    ##********************************************************
+    def filterTable(self):
+        filter_text = self.lineEdit.text().strip()
+        self.diag_table.filterTable(filter_text)
+
+    def refreshFileBrowser(self):
+        source_path = os.getenv('CBS_HOME')
+
+        self.expandSubDir(source_path)
 
 
     def showSource(self):
