@@ -155,7 +155,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.treeView_filebrowser.setContextMenuPolicy(Qt.CustomContextMenu)
         self.treeView_filebrowser.customContextMenuRequested.connect(self.creat_rightmenu)
         # double click
-        self.treeView_filebrowser.doubleClicked.connect(self.creat_rightmenu)
+        self.treeView_filebrowser.doubleClicked.connect(self.doubleClickedRightmenu)
         
         # tooltip
         QToolTip.setFont(QFont('SansSerif',9))
@@ -340,13 +340,13 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.statusbar.show()
 
         if tool == 'Gvim':
-            cmd = f"gvim {file_name}"
+            cmd = f"gvim {file_name} &"
         elif tool == 'vscode':
-            cmd = f"code {file_name}"
+            cmd = f"code {file_name} &"
         elif tool == 'Simvision':
-            cmd = f"simvision -64bit {file_name}"
+            cmd = f"simvision -64bit {file_name} &"
         elif tool == 'Verdi':
-            cmd = f"verdi -ssf {file_name}"
+            cmd = f"verdi -ssf {file_name} &"
 
         os.system(cmd)
 
@@ -363,6 +363,13 @@ class MyMainForm(QMainWindow, Ui_smt):
 
     def openWithVerdi(self):
         self.openFileBrowser("Verdi")
+
+    def doubleClickedRightmenu(self):
+        index = self.treeView_filebrowser.currentIndex()
+        if index.isValid() and self.dir_model.isDir(index):
+            return
+        else:
+            self.creat_rightmenu()
 
     def creat_rightmenu(self):
         self.treeView_menu=QMenu(self)
