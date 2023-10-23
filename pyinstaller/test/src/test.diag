@@ -4,7 +4,7 @@ testcase0 path=hello_world config=111 scp=0 comp_argvs='+define+SRAM_SIM' run_ar
 
 testcase1 path=hello_world2 config=111 scp=4 comp_argvs='+define+SRAM_SIM' run_argvs='gui=1' run_boards='' argv='+define+TIMEOUT=5000' 
 
-testcase2 path=hello_world2 config=111 scp=2 comp_argvs='+define+SRAM_SIM' run_argvs='gui=1' run_boards='' argv='+define+TIMEOUT=5000' 
+testcase2 path=hello_world2 config=111 scp=1 comp_argvs='+define+SRAM_SIM' run_argvs='gui=1' run_boards='' argv='+define+TIMEOUT=5000' 
 
 testcase3 path=hello_world3 config=111 scp=3 comp_argvs='+define+SRAM_SIM' run_argvs='gui=1' run_boards='' argv='+define+TIMEOUT=5000' 
 

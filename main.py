@@ -162,6 +162,11 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.treeView_filebrowser.setToolTip('双击或单击右键可调出菜单')
 
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
+        # 创建线程池
+        #+++++++++++++++++++++++++++++++++++++++++++++++++++++
+        self.mutiWorkThreads = MutiWorkThread(self)
+
+        #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Create Diag Table
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         self.load_diag_table = DiagTable(self)
@@ -205,11 +210,6 @@ class MyMainForm(QMainWindow, Ui_smt):
         #self.diag_table.customContextMenuRequested.connect(self.diagTableContextMenu)
 
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
-        # 创建线程池
-        #+++++++++++++++++++++++++++++++++++++++++++++++++++++
-        self.mutiWorkThreads = MutiWorkThread(self)
-
-        #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Set statusbar information
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         self.statusbar.showMessage('如有疑问, 请联系 chaozhanghu@phytium.com.cn  @Qsmtool 23.09-0001', 0)
@@ -231,7 +231,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.selectalltc.clicked.connect(self.load_diag_table.selectalltcFunc)
 
         ## reload items
-        self.reload.clicked.connect(self.reloadDiagFunc)
+        self.reload.clicked.connect(self.load_diag_table.reloadDiagFile)
 
         # action "Exit"
         self.actionExit.triggered.connect(self.exitGui)
@@ -395,27 +395,27 @@ class MyMainForm(QMainWindow, Ui_smt):
     #********************************************************
     # 重新加载diag文件
     #********************************************************
-    def reloadDiagFunc(self):
-        current_progress = self.progressBar.value()
-        if current_progress > 0 and current_progress < 100:
-            self.textBrowser.consel('上次发布的任务还没有结束, 暂时无法执行刷新操作.', 'red')
-            return
+    #def reloadDiagFunc(self):
+    #    current_progress = self.progressBar.value()
+    #    if current_progress > 0 and current_progress < 100:
+    #        self.textBrowser.consel('上次发布的任务还没有结束, 暂时无法执行刷新操作.', 'red')
+    #        return
 
-        self.mutiWorkThreads = MutiWorkThread(self)
-        self.progressBar.setValue(0)
-        self.progressBar.setStyleSheet("")  # 清空样式表
+    #    self.mutiWorkThreads = MutiWorkThread(self)
+    #    self.progressBar.setValue(0)
+    #    self.progressBar.setStyleSheet("")  # 清空样式表
 
-        self.textBrowser.consel("刷新diag表信息.","green")
+    #    self.textBrowser.consel("刷新diag表信息.","green")
 
-        #self.diag_table.setSortingEnabled(False)
-        self.diag_table.clearContents()
-        self.diag_table.setRowCount(0)
-        self.load_diag_table.fillDataForTable()
-        self.diag_table.repaint()
-        self.diag_table.setSortingEnabled(True)
+    #    #self.diag_table.setSortingEnabled(False)
+    #    #self.diag_table.clearContents()
+    #    #self.diag_table.setRowCount(0)
+    #    self.load_diag_table.fillDataForTable()
+    #    #self.diag_table.repaint()
+    #    #self.diag_table.setSortingEnabled(True)
 
-        # 调整列宽以适应内容
-        self.diag_table.resizeColumnsToContents()
+    #    # 调整列宽以适应内容
+    #    #self.diag_table.resizeColumnsToContents()
 
     ##********************************************************
     ## 保存diag文件

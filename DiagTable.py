@@ -3,6 +3,7 @@
 import os
 
 import extractDiag
+from workerThread import MutiWorkThread
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -16,6 +17,8 @@ class DiagTable():
         self.diag_table = smtui.diag_table
         self.textBrowser = smtui.textBrowser
         self.web_view = smtui.web_view
+        self.progressBar = smtui.progressBar
+        self.mutiWorkThreads = smtui.mutiWorkThreads 
         self.treeView_filebrowser = smtui.treeView_filebrowser 
         self.dir_model = smtui.dir_model
 
@@ -29,7 +32,10 @@ class DiagTable():
         # 关闭自动sorting功能，只在点击header时sorting
         self.diag_table.setSortingEnabled(False)
         # 连接表头点击信号
-        self.diag_table.horizontalHeader().sectionClicked.connect(self.onHeaderClicked)
+        self.header = self.diag_table.horizontalHeader()
+        self.header.sectionClicked.connect(self.onHeaderClicked)
+        # 连接表头列宽调整信号
+        #self.header.sectionResized.connect(self.onColumnResized)
 
         # 设置表头标签
         self.diag_table.setColumnCount(10)
@@ -43,6 +49,8 @@ class DiagTable():
                         "run_boards",
                         "argv"]
         self.diag_table.setHorizontalHeaderLabels(self.table_header)
+        # 存储每列的原始大小
+        self.original_sizes = [self.header.sectionSize(col) for col in range(self.header.count())]
 
         self.fillDataForTable()
 
@@ -56,7 +64,21 @@ class DiagTable():
         self.diag_table.setContextMenuPolicy(Qt.CustomContextMenu)
         self.diag_table.customContextMenuRequested.connect(self.diagTableContextMenu)
 
+    #********************************************************
+    # 填充diag table的内容
+    #********************************************************
     def reloadDiagFile(self):
+        current_progress = self.progressBar.value()
+        if current_progress > 0 and current_progress < 100:
+            self.textBrowser.consel('上次发布的任务还没有结束, 暂时无法执行刷新操作.', 'red')
+            return
+
+        self.mutiWorkThreads = MutiWorkThread(self.smtui)
+        self.progressBar.setValue(0)
+        self.progressBar.setStyleSheet("")  # 清空样式表
+
+        self.textBrowser.consel("刷新diag表信息.","green")
+
         self.reloadDiagEvent = True
         #self.setSortingEnabled(False)
         self.diag_table.clearContents()
@@ -111,7 +133,21 @@ class DiagTable():
 
         # 调整列宽以适应内容
         self.diag_table.resizeColumnsToContents()
+        # 存储每列的原始大小
+        self.original_sizes = [self.header.sectionSize(col) for col in range(self.header.count())]
 
+    #********************************************************
+    # 当click在header上时开启sorting，其余时间关闭，似乎没有起作用.
+    #********************************************************
+    def onColumnResized(self, logicalIndex, old_size, new_size):
+        # 设置其他列的大小为原始大小
+        for col in range(self.header.count()):
+            if col != logicalIndex:
+                self.header.resizeSection(col, self.original_sizes[col])
+
+    #********************************************************
+    # 当click在header上时开启sorting，其余时间关闭，似乎没有起作用.
+    #********************************************************
     def onHeaderClicked(self, logicalIndex):
         # 在表头点击时启用排序功能，否则禁用
         if self.diag_table.isSortingEnabled():
@@ -140,6 +176,8 @@ class DiagTable():
 
         # 调整列宽以适应内容
         self.diag_table.resizeColumnsToContents()
+        # 存储每列的原始大小
+        self.original_sizes = [self.header.sectionSize(col) for col in range(self.header.count())]
 
     #********************************************************
     # 保存diag文件
