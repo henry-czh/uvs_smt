@@ -494,7 +494,7 @@ class DiagTable():
             # 设置元格Item
             statusItem = QTableWidgetItem()
             pixmap = QPixmap(":/ico/null.png")
-            statusItem.setText(' '*2)
+            statusItem.setText(' '*6)
             statusItem.setIcon(QIcon(pixmap))
             self.diag_table.setItem(new_row, 0, statusItem)
 
