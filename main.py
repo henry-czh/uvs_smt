@@ -85,8 +85,24 @@ class MyMainForm(QMainWindow, Ui_smt):
         font.setPointSize(9)
         self.textBrowser.setFont(font)
         self.textBrowser.setObjectName("textBrowser")
-        self.verticalLayout_5.addWidget(self.textBrowser)
+        self.verticalLayout_5.addWidget(self.textBrowser,1)
 
+        self.lineEdit_cmd = QLineEdit()
+        self.lineEdit_cmd.setMinimumSize(QSize(2, 2))
+        self.lineEdit_cmd.setClearButtonEnabled(True)
+        self.lineEdit_cmd.setObjectName("lineEdit_cmd")
+        self.verticalLayout_5.addWidget(self.lineEdit_cmd,0)
+        self.lineEdit_cmd.returnPressed.connect(self.executeCommand)
+        # 设置占位符文本
+        self.lineEdit_cmd.setPlaceholderText("输入shell命令...")
+
+        # 创建一个QCompleter并关联到QLineEdit
+        completer = QCompleter(['ls', 'make', 'git', 'cd', 'cat', 'grep'], self)
+        self.lineEdit_cmd.setCompleter(completer)
+
+        self.process = QProcess()
+        self.process.readyReadStandardOutput.connect(self.handleProcessOutput)
+        self.process.readyReadStandardError.connect(self.handleProcessError)
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # 启动后台CGI服务
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -229,6 +245,24 @@ class MyMainForm(QMainWindow, Ui_smt):
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     #   xxxxxxxxxx      Functions       xxxxxxxxxxxx
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    #********************************************************
+    # 运行shell命令
+    #********************************************************
+    def executeCommand(self):
+        command = self.lineEdit_cmd.text()
+        self.lineEdit_cmd.clear()
+
+        self.process.start('bash', ['-c', command])
+
+    def handleProcessOutput(self):
+        output = self.process.readAllStandardOutput()
+        output_text = str(output, encoding='utf-8')
+        self.textBrowser.consel(output_text, 'black')
+
+    def handleProcessError(self):
+        error = self.process.readAllStandardError()
+        error_text = str(error, encoding='utf-8')
+        self.textBrowser.consel(error_text, 'black')
 
     #********************************************************
     # 运行仿真：1. 收集参数；2. 批量处理任务； 3. 收集运行结果；
