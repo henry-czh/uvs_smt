@@ -101,7 +101,7 @@ class MutiWorkThread():
     def singleRun(self, cmd):
         testcases = self.collectSingleRunCMDs(True)
         if len(testcases):
-            self.consol.consel(f"新增任务到进程池，该操作将扩展 {len(testcases)} 并行进程数. \n", 'black')
+            self.consol.consel(f"新增任务到进程池，该操作将扩展 {len(testcases)} 并行进程数. 执行详情见Result栏. \n", 'black')
 
         for item in testcases:
             self.creat_thread(item, cmd)
@@ -111,7 +111,7 @@ class MutiWorkThread():
     def run(self, cmd):
         self.multirun_cmd = cmd
         self.max_threads = int(self.smtui.comboBox_threads.currentText())
-        self.consol.consel(f"设置最大并行任务数 {str(self.max_threads)}\n", 'black')
+        self.consol.consel(f"设置最大并行任务数 {str(self.max_threads)}, 执行详情见Result栏.\n", 'black')
         self.thread_count = 0
 
         self.consol.consel(f"queue:{self.thread_queue.qsize()}\n",'black')

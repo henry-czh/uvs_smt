@@ -439,7 +439,7 @@ class DiagTable():
             return
 
         # 关闭正在进行的进程
-        self.singleStopSimulateFunc()
+        self.smtui.singleStopSimulateFunc()
 
         # 删除选定的行
         selected_rows = set()
