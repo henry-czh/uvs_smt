@@ -285,7 +285,7 @@
          <enum>QTabWidget::West</enum>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="tabsClosable">
          <bool>false</bool>
@@ -343,7 +343,7 @@
                <x>0</x>
                <y>0</y>
                <width>854</width>
-               <height>576</height>
+               <height>572</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -377,7 +377,7 @@
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
-            <widget class="QWidget" name="">
+            <widget class="QWidget" name="layoutWidget">
              <layout class="QHBoxLayout" name="horizontalLayout">
               <item>
                <widget class="QCheckBox" name="cloudCB">
@@ -1615,7 +1615,7 @@ color: rgb(255, 255, 255);</string>
               </layout>
              </widget>
             </widget>
-            <widget class="QWidget" name="">
+            <widget class="QWidget" name="layoutWidget">
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
                <widget class="QPushButton" name="saveDiag">
