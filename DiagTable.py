@@ -114,7 +114,7 @@ class DiagTable():
 
             # 创建一个QCheckBox并将其放入单元格
             checkbox = QTableWidgetItem()
-            checkbox.setText(' ')
+            checkbox.setText(' '*2)
             checkbox.setFlags(checkbox.flags() | Qt.ItemIsUserCheckable)
             checkbox.setFlags(checkbox.flags() & ~Qt.ItemIsEditable)  # 移除 Qt.ItemIsEditable 标志
             checkbox.setCheckState(Qt.Unchecked)
@@ -124,10 +124,10 @@ class DiagTable():
             statusItem = QTableWidgetItem()
             if path_exist:
                 pixmap = QPixmap(":/ico/checkmark.png")
-                statusItem.setText(' ')
+                statusItem.setText(' '*5)
             else:
                 pixmap = QPixmap(":/ico/null.png")
-                statusItem.setText(' '*2)
+                statusItem.setText(' '*6)
             statusItem.setIcon(QIcon(pixmap))
             statusItem.setFlags(statusItem.flags() & ~Qt.ItemIsEditable)  # 移除 Qt.ItemIsEditable 标志
             self.diag_table.setItem(row, 0, statusItem)
@@ -164,9 +164,9 @@ class DiagTable():
     def handleItemChanged(self, item):
         if item.column() == 1:
             if item.checkState() == Qt.Unchecked:
-                item.setText(' ')
-            else:
                 item.setText(' '*2)
+            else:
+                item.setText(' ')
 
         if item and item.column() < 2:
             return
@@ -219,10 +219,10 @@ class DiagTable():
             item = self.diag_table.item(row, 1)
             if current_state == Qt.Unchecked:
                 item.setCheckState(Qt.Checked)
-                item.setText(' '*2)
+                item.setText(' ')
             else:
                 item.setCheckState(Qt.Unchecked)
-                item.setText(' ')
+                item.setText(' '*2)
 
     #********************************************************
     # 删除table项确认菜单
@@ -488,7 +488,7 @@ class DiagTable():
             checkbox = QTableWidgetItem()
             checkbox.setFlags(checkbox.flags() | Qt.ItemIsUserCheckable)
             checkbox.setCheckState(Qt.Unchecked)
-            checkbox.setText(' ')
+            checkbox.setText(' '*2)
             self.diag_table.setItem(new_row, 1, checkbox)
 
             # 设置元格Item

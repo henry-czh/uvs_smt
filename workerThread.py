@@ -261,11 +261,11 @@ class MutiWorkThread():
         if '[Success]' in statusStr:
             self.task_record_status[finishedItem] = True
             icon = ":/ico/check-mark.png"
-            statusItem.setText(' '*4)
+            statusItem.setText(' ')
         else:
             self.task_record_status[finishedItem] = False
             icon = ":/ico/error.png"
-            statusItem.setText(' '*5)
+            statusItem.setText(' '*2)
 
         pixmap = QPixmap(icon)
         statusItem.setIcon(QIcon(pixmap))
@@ -301,7 +301,7 @@ class MutiWorkThread():
                     current_state = item.checkState()
                     if current_state == Qt.Unchecked:
                         item.setCheckState(Qt.Checked)
-                        item.setText(' '*2)
+                        item.setText(' ')
 
         return selected_items
 
@@ -322,7 +322,7 @@ class MutiWorkThread():
                     self.task_record_running[selected_item] = True
                     # 创建QPixmap对象并设置图像
                     pixmap = QPixmap(":/ico/parcel.png")
-                    status_item.setText(' '*6)
+                    status_item.setText(' '*4)
                     status_item.setIcon(QIcon(pixmap))
                     check_item.setFlags(check_item.flags() & ~Qt.ItemIsUserCheckable)  # 移除 Qt.ItemIsUserCheckable 标志
 
