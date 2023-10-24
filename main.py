@@ -69,6 +69,8 @@ class MyMainForm(QMainWindow, Ui_smt):
 
         max_threads_list = ['5', '10', '20', '50', '100']
         self.comboBox_threads.addItems(max_threads_list)
+        tools_list = ['xrun', 'vcs']
+        self.comboBox_tool.addItems(tools_list)
         #self.html_file = os.getenv('HTML_FILE')
         #self.saveDir = os.path.abspath(os.path.join(os.getcwd(), "../config"))
         self.result_line_count = 0
@@ -217,8 +219,6 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.simu_runCB.stateChanged.connect(self.connectCMDCB)
         self.simu_elabCB.stateChanged.connect(self.connectCMDCB)
         self.simu_simCB.stateChanged.connect(self.connectCMDCB)
-        self.pldcompCB_2.stateChanged.connect(self.connectCMDCB)
-        self.pld_runCB_2.stateChanged.connect(self.connectCMDCB)
         self.mlCB.stateChanged.connect(self.connectCMDCB)
         self.guiCB.stateChanged.connect(self.connectCMDCB)
         self.fsdbCB.stateChanged.connect(self.connectCMDCB)
@@ -256,6 +256,7 @@ class MyMainForm(QMainWindow, Ui_smt):
             cmd = 'bsub -Is make '
         else:
             cmd = 'make '
+        cmd += f"tool={self.comboBox_tool.currentText()} "
         for key,value in self.simulateCMD.items():
             if value:
                 if key == 'EDA云':

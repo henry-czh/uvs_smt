@@ -550,48 +550,31 @@
              </property>
              <widget class="QWidget" name="xrun_tab">
               <attribute name="title">
-               <string>xrun</string>
+               <string>Sim</string>
               </attribute>
               <layout class="QFormLayout" name="formLayout">
                <item row="0" column="0" colspan="2">
                 <layout class="QGridLayout" name="gridLayout">
-                 <item row="0" column="1">
-                  <widget class="QLabel" name="label_3">
-                   <property name="font">
-                    <font>
-                     <family>Ubuntu</family>
-                     <pointsize>11</pointsize>
-                     <weight>75</weight>
-                     <bold>true</bold>
-                     <underline>false</underline>
-                     <strikeout>false</strikeout>
-                     <kerning>true</kerning>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">background-color: rgb(192, 97, 203);
-color: rgb(255, 255, 255);</string>
-                   </property>
-                   <property name="frameShape">
-                    <enum>QFrame::Panel</enum>
-                   </property>
-                   <property name="frameShadow">
-                    <enum>QFrame::Raised</enum>
-                   </property>
+                 <item row="1" column="4">
+                  <widget class="QCheckBox" name="simu_elabCB">
                    <property name="text">
-                    <string>pre-elab</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
+                    <string>elab</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="5">
+                 <item row="1" column="7">
+                  <widget class="QCheckBox" name="fsdbCB">
+                   <property name="text">
+                    <string>fsdb=1</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="8">
                   <widget class="QLabel" name="label_21">
                    <property name="font">
                     <font>
-                     <family>Ubuntu</family>
-                     <pointsize>11</pointsize>
+                     <family>DejaVu Sans Mono</family>
+                     <pointsize>10</pointsize>
                      <weight>75</weight>
                      <bold>true</bold>
                     </font>
@@ -614,12 +597,52 @@ color: rgb(255, 255, 255);</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="3" colspan="2">
+                 <item row="1" column="1">
+                  <widget class="QCheckBox" name="updateconfigsCB">
+                   <property name="text">
+                    <string>updateconfig</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="8">
+                  <widget class="QCheckBox" name="verdiCB">
+                   <property name="toolTip">
+                    <string>使用Verii打开fsdb波形，要求 run带fsdb=1</string>
+                   </property>
+                   <property name="text">
+                    <string>verdi</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QComboBox" name="comboBox_tool">
+                   <property name="toolTip">
+                    <string>选择仿真工具</string>
+                   </property>
+                   <property name="editable">
+                    <bool>true</bool>
+                   </property>
+                   <property name="currentText">
+                    <string/>
+                   </property>
+                   <property name="currentIndex">
+                    <number>-1</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="3">
+                  <widget class="QCheckBox" name="compiler">
+                   <property name="text">
+                    <string>compiler</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="6" colspan="2">
                   <widget class="QLabel" name="label_4">
                    <property name="font">
                     <font>
-                     <family>Ubuntu</family>
-                     <pointsize>11</pointsize>
+                     <family>DejaVu Sans Mono</family>
+                     <pointsize>10</pointsize>
                      <weight>75</weight>
                      <bold>true</bold>
                     </font>
@@ -642,77 +665,7 @@ color: rgb(255, 255, 255);</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="1" column="3">
-                  <widget class="QCheckBox" name="simu_runCB">
-                   <property name="text">
-                    <string>run</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="2">
-                  <widget class="QCheckBox" name="simu_elabCB">
-                   <property name="text">
-                    <string>elab</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="3">
-                  <widget class="QCheckBox" name="simu_simCB">
-                   <property name="text">
-                    <string>sim</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QCheckBox" name="compiler">
-                   <property name="text">
-                    <string>compiler</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QCheckBox" name="cleanCB">
-                   <property name="text">
-                    <string>clean</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QCheckBox" name="buildCB">
-                   <property name="text">
-                    <string>build</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="4">
-                  <widget class="QCheckBox" name="fsdbCB">
-                   <property name="text">
-                    <string>fsdb=1</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="5">
-                  <widget class="QCheckBox" name="waveCB">
-                   <property name="text">
-                    <string>wave</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="4">
-                  <widget class="QCheckBox" name="guiCB">
-                   <property name="text">
-                    <string>gui=1</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QCheckBox" name="updateconfigsCB">
-                   <property name="text">
-                    <string>updateconfig</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="0">
+                 <item row="0" column="0" colspan="2">
                   <widget class="QLabel" name="label">
                    <property name="font">
                     <font>
@@ -740,7 +693,87 @@ color: rgb(255, 255, 255);</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="2">
+                 <item row="0" column="2" colspan="2">
+                  <widget class="QLabel" name="label_3">
+                   <property name="font">
+                    <font>
+                     <family>DejaVu Sans Mono</family>
+                     <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
+                     <underline>false</underline>
+                     <strikeout>false</strikeout>
+                     <kerning>true</kerning>
+                    </font>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(192, 97, 203);
+color: rgb(255, 255, 255);</string>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::Panel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <property name="text">
+                    <string>pre-elab</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="7">
+                  <widget class="QCheckBox" name="guiCB">
+                   <property name="text">
+                    <string>gui=1</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="8">
+                  <widget class="QCheckBox" name="waveCB">
+                   <property name="text">
+                    <string>wave</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QCheckBox" name="buildCB">
+                   <property name="text">
+                    <string>build</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QCheckBox" name="cleanCB">
+                   <property name="text">
+                    <string>clean</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="6">
+                  <widget class="QCheckBox" name="coverCB">
+                   <property name="text">
+                    <string>cov=1</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="6">
+                  <widget class="QCheckBox" name="simu_runCB">
+                   <property name="text">
+                    <string>run</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="5">
+                  <widget class="QCheckBox" name="mlCB">
+                   <property name="text">
+                    <string>ml=1</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="4" colspan="2">
                   <widget class="QLabel" name="label_2">
                    <property name="font">
                     <font>
@@ -768,14 +801,7 @@ color: rgb(255, 255, 255);</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="2">
-                  <widget class="QCheckBox" name="mlCB">
-                   <property name="text">
-                    <string>ml=1</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="2">
+                 <item row="3" column="4">
                   <widget class="QCheckBox" name="quitCB">
                    <property name="toolTip">
                     <string>静默编译，不打印到STDOUT</string>
@@ -785,222 +811,10 @@ color: rgb(255, 255, 255);</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="5">
-                  <widget class="QCheckBox" name="verdiCB">
-                   <property name="toolTip">
-                    <string>使用Verii打开fsdb波形，要求 run带fsdb=1</string>
-                   </property>
-                   <property name="text">
-                    <string>verdi</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="3">
-                  <widget class="QCheckBox" name="coverCB">
-                   <property name="text">
-                    <string>cov=1</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-             <widget class="QWidget" name="vcs_tab">
-              <attribute name="title">
-               <string>vcs</string>
-              </attribute>
-              <layout class="QGridLayout" name="gridLayout_7">
-               <item row="0" column="0">
-                <layout class="QGridLayout" name="gridLayout_2">
-                 <item row="0" column="2">
-                  <widget class="Line" name="line_11">
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="6">
-                  <widget class="QCheckBox" name="pldcompCB_2">
-                   <property name="text">
-                    <string>comp</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="3" colspan="2">
-                  <widget class="QLabel" name="label_5">
-                   <property name="font">
-                    <font>
-                     <family>DejaVu Sans Mono</family>
-                     <pointsize>10</pointsize>
-                     <weight>75</weight>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>Simu</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="8">
-                  <widget class="Line" name="line_5">
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QCheckBox" name="cleanCB_2">
-                   <property name="text">
-                    <string>clean</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="4">
-                  <widget class="QCheckBox" name="simu_simCB_2">
+                 <item row="3" column="6">
+                  <widget class="QCheckBox" name="simu_simCB">
                    <property name="text">
                     <string>sim</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="0" colspan="2">
-                  <widget class="QLabel" name="label_6">
-                   <property name="font">
-                    <font>
-                     <family>DejaVu Sans Mono</family>
-                     <pointsize>10</pointsize>
-                     <weight>75</weight>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>Common</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="9" colspan="2">
-                  <widget class="QLabel" name="label_7">
-                   <property name="font">
-                    <font>
-                     <family>DejaVu Sans Mono</family>
-                     <pointsize>10</pointsize>
-                     <weight>75</weight>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>Zebu</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QCheckBox" name="waveCB_2">
-                   <property name="text">
-                    <string>wave</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="5">
-                  <widget class="Line" name="line_6">
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="4">
-                  <widget class="QCheckBox" name="simu_runCB_2">
-                   <property name="text">
-                    <string>run</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="7">
-                  <widget class="QCheckBox" name="pld_runCB_2">
-                   <property name="text">
-                    <string>run</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="10">
-                  <widget class="QCheckBox" name="checkBox_14">
-                   <property name="text">
-                    <string>CheckBox</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QCheckBox" name="mlCB_2">
-                   <property name="text">
-                    <string>multi-lib</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QCheckBox" name="buildCB_2">
-                   <property name="text">
-                    <string>build</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="6" colspan="2">
-                  <widget class="QLabel" name="label_8">
-                   <property name="font">
-                    <font>
-                     <family>DejaVu Sans Mono</family>
-                     <pointsize>10</pointsize>
-                     <weight>75</weight>
-                     <bold>true</bold>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>PLD</string>
-                   </property>
-                   <property name="alignment">
-                    <set>Qt::AlignCenter</set>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="9">
-                  <widget class="QCheckBox" name="checkBox_5">
-                   <property name="text">
-                    <string>CheckBox</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="3">
-                  <widget class="QCheckBox" name="compiler_2">
-                   <property name="text">
-                    <string>compiler</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="3">
-                  <widget class="QCheckBox" name="simu_elabCB_2">
-                   <property name="text">
-                    <string>elab</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="0">
-                  <widget class="QCheckBox" name="updateconfigsCB_2">
-                   <property name="text">
-                    <string>updateconfig</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="3">
-                  <widget class="QCheckBox" name="guiCB_2">
-                   <property name="text">
-                    <string>gui</string>
                    </property>
                   </widget>
                  </item>
