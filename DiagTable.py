@@ -342,6 +342,8 @@ class DiagTable():
         else:
             self.textBrowser.consel("路径不存在: %s" % (subdir), 'red')
 
+        self.treeView_filebrowser.setColumnWidth(0, 300)
+
     ##********************************************************
     ## 过滤table中的项
     ##********************************************************
@@ -350,7 +352,8 @@ class DiagTable():
         self.diag_table.filterTable(filter_text)
 
     def refreshFileBrowser(self):
-        source_path = os.getenv('CBS_HOME')
+        #source_path = os.getenv('CBS_HOME')
+        source_path = os.getcwd()
 
         self.expandSubDir(source_path)
 

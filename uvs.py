@@ -914,7 +914,7 @@ class Ui_smt(object):
         self.toolBar_2.addSeparator()
 
         self.retranslateUi(smt)
-        self.broswer_tabWidget.setCurrentIndex(0)
+        self.broswer_tabWidget.setCurrentIndex(1)
         self.main_tabWidget.setCurrentIndex(0)
         self.tabWidget.setCurrentIndex(0)
         self.comboBox_tool.setCurrentIndex(-1)

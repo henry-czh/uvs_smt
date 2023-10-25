@@ -73,8 +73,6 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.comboBox_tool.addItems(tools_list)
         #self.html_file = os.getenv('HTML_FILE')
         #self.saveDir = os.path.abspath(os.path.join(os.getcwd(), "../config"))
-        self.result_line_count = 0
-        self.result_max_lines = 10000
 
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Create Console Window
@@ -103,20 +101,6 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.process = QProcess()
         self.process.readyReadStandardOutput.connect(self.handleProcessOutput)
         self.process.readyReadStandardError.connect(self.handleProcessError)
-        #+++++++++++++++++++++++++++++++++++++++++++++++++++++
-        # 启动后台CGI服务
-        #+++++++++++++++++++++++++++++++++++++++++++++++++++++
-        # 要执行的外部命令
-        #cgi_path = os.path.abspath(os.path.join(os.getcwd(), "verif_config"))
-        #command = "cd %s; python2 -m CGIHTTPServer 8008  > ~/.uvs/cgihttp.out" % (cgi_path)
-
-        # 使用subprocess.Popen()创建非阻塞子进程
-        #self.process = subprocess.Popen(command, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
-
-        # 获取命令的标准输出和标准错误
-        #stdout_data, stderr_data = process.communicate()
-        #self.textBrowser.consel(process.stdout, 'black')
-        #self.textBrowser.consel(process.stderr, 'black')
 
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # 创建一个web界面
@@ -188,6 +172,9 @@ class MyMainForm(QMainWindow, Ui_smt):
         # Create Diag Table
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         self.load_diag_table = DiagTable(self)
+
+        source_path = os.getcwd()
+        self.load_diag_table.expandSubDir(source_path)
 
         # 连接文本框的文本更改事件到过滤函数
         self.lineEdit.textChanged.connect(self.load_diag_table.filterTable)

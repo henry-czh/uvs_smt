@@ -90,6 +90,8 @@ class MutiWorkThread():
         # 存储子进程的 Popen 对象
         self.threads = []
 
+        self.result_line_count = 0
+        self.result_max_lines = 2000
         self.error_style = "QProgressBar::chunk { background-color: orange; }"  # 设置已完成部分的颜色
         self.error_style += "QProgressBar {border: 2px solid grey; border-radius: 5px; background: lightgrey;}" 
         self.error_style += "QProgressBar { text-align: center; }"  # 设置文本居中
@@ -232,6 +234,23 @@ class MutiWorkThread():
             self.progressBar.setValue(1)
 
     def taskResult(self, result):
+        # 获取当前文本
+        current_text = self.resultBrowser.toPlainText()
+        # 将文本按行拆分
+        lines = current_text.split('\n')
+        # 如果行数超过最大行数，删除前面的行
+        if len(lines) >= self.result_max_lines:
+            lines = lines[len(lines) - self.result_max_lines + 1:]
+        # 重新构建文本
+        new_text = '\n'.join(lines) + result
+        # 设置新文本
+        self.resultBrowser.setPlainText(new_text)
+
+        cursor = self.resultBrowser.textCursor()
+        cursor.movePosition(QTextCursor.End)
+        self.resultBrowser.setTextCursor(cursor)
+        self.resultBrowser.ensureCursorVisible()
+
         ## 检查当前行数是否超过上限
         #if self.result_line_count >= self.result_max_lines:
         #    # 删除旧的行，保留最新的行
@@ -241,12 +260,12 @@ class MutiWorkThread():
         #    cursor.removeSelectedText()
         #    self.result_line_count = self.result_max_lines - 1
 
-        cursor = self.resultBrowser.textCursor()
-        cursor.movePosition(QTextCursor.End)
-        cursor.insertText(result)
+        #cursor = self.resultBrowser.textCursor()
+        #cursor.movePosition(QTextCursor.End)
+        #cursor.insertText(result)
         #self.result_line_count += 1
-        self.resultBrowser.setTextCursor(cursor)
-        self.resultBrowser.ensureCursorVisible()
+        #self.resultBrowser.setTextCursor(cursor)
+        #self.resultBrowser.ensureCursorVisible()
 
     def tagProcessStatus(self, statusStr):
         if '[Info]' in statusStr:
