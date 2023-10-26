@@ -57,15 +57,18 @@ class MyMainForm(QMainWindow, Ui_smt):
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # System Setting
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
-        self.cfg_file = os.getenv('BASE_CONFIG_FILE')
-        self.usr_cfg_file = os.getenv('USER_CONFIG_FILE')
-        self.saveDir = os.getenv('CONFIG_SAVE_DIR')
-        self.svgfile = os.getenv('SVG_FILE')
-        self.diag_file = os.getenv('DIAG_FILE')
-        self.set_file = os.getenv('SETTING_FILE')
+        self.cfg_file       = os.getenv('BASE_CONFIG_FILE')
+        self.usr_cfg_file   = os.getenv('USER_CONFIG_FILE')
+        self.saveDir        = os.getenv('CONFIG_SAVE_DIR')
+        self.svgfile        = os.getenv('SVG_FILE')
+        TB_HOME             = os.getenv('TB_HOME')
+        CBS_HOME            = os.getenv('CBS_HOME')
 
-        config = ConfigParser()
-        config.read(self.set_file)
+        cmn_setting_file = os.path.join(CBS_HOME,'testbench/uvs.ini')
+        if not os.path.exists(cmn_setting_file):
+            print('uvs.ini文件缺失!')
+        cmn_config = ConfigParser()
+        cmn_config.read(cmn_setting_file)
 
         self.simulateCMD = collections.OrderedDict()
         self.simulateCMD = {'clean':None,'build':None,'compiler':None,'elab':None,'sim':None,
@@ -142,22 +145,29 @@ class MyMainForm(QMainWindow, Ui_smt):
         #self.main_tabWidget.addTab(self.baidu_view, "搜索引擎")
         #self.baidu_view.setUrl(QUrl("http://www.baidu.com"));
 
-        self.webView_uvs = QWebEngineView(self.tab_2)
+        self.webView_uvs        = QWebEngineView(self.tab_uvs)
+        self.webView_dcode      = QWebEngineView(self.tab_dcode)
+        self.webView_ddoc       = QWebEngineView(self.tab_ddoc)
+        self.webView_vproject   = QWebEngineView(self.tab_vproject)
+        self.webView_regs       = QWebEngineView(self.tab_regs)
 
         # 从配置文件中获取窗口参数
-        webs_settings = config['Webs']
-        uvs_web = webs_settings.get('uvs_gitlab')
-        print(uvs_web)
-        dcode_web = webs_settings.get('design_code_gitlab')
-        ddoc_web = webs_settings.get('design_doc_gitlab')
-        vproject_web = webs_settings.get('vproject_gitlab')
-        regs_web = webs_settings.get('regs_gitlab')
+        if cmn_config.has_section('Webs'):
+            webs_settings = cmn_config['Webs']
+            uvs_web = webs_settings.get('uvs_gitlab')
+            dcode_web = webs_settings.get('design_code_gitlab')
+            ddoc_web = webs_settings.get('design_doc_gitlab')
+            vproject_web = webs_settings.get('vproject_gitlab')
+            regs_web = webs_settings.get('regs_gitlab')
 
-        self.webView_uvs.setUrl(QUrl(str(uvs_web)));
-        #self.webView_2.setUrl(QUrl(dcode_web));
-        #self.webView_3.setUrl(QUrl(ddoc_web));
-        #self.webView_4.setUrl(QUrl(vproject_web));
-        #self.webView_5.setUrl(QUrl(regs_web));
+            self.webView_uvs.setUrl(QUrl(uvs_web));
+            self.verticalLayout_7.addWidget(self.webView_uvs)
+            self.webView_uvs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+
+            self.webView_dcode.setUrl(QUrl(dcode_web))
+            self.webView_ddoc.setUrl(QUrl(ddoc_web))
+            self.webView_vproject.setUrl(QUrl(vproject_web))
+            self.webView_regs.setUrl(QUrl(regs_web))
 
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # 创建一个文件浏览器

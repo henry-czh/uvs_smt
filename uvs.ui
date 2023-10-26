@@ -343,7 +343,7 @@
                <x>0</x>
                <y>0</y>
                <width>940</width>
-               <height>581</height>
+               <height>575</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -423,14 +423,14 @@
                 <property name="sizeAdjustPolicy">
                  <enum>QComboBox::AdjustToContents</enum>
                 </property>
-                <property name="placeholderText">
-                 <string/>
-                </property>
                 <property name="frame">
                  <bool>true</bool>
                 </property>
                 <property name="modelColumn">
                  <number>0</number>
+                </property>
+                <property name="placeholderText" stdset="0">
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -1578,7 +1578,7 @@ color: rgb(255, 255, 255);</string>
             <property name="currentIndex">
              <number>0</number>
             </property>
-            <widget class="QWidget" name="tab_3">
+            <widget class="QWidget" name="tab_uvs">
              <attribute name="icon">
               <iconset resource="icon.qrc">
                <normaloff>:/ico/uvs_white.jpg</normaloff>:/ico/uvs_white.jpg</iconset>
@@ -1588,7 +1588,7 @@ color: rgb(255, 255, 255);</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_7"/>
             </widget>
-            <widget class="QWidget" name="tab_2">
+            <widget class="QWidget" name="tab_dcode">
              <attribute name="icon">
               <iconset resource="icon.qrc">
                <normaloff>:/ico/coda.png</normaloff>:/ico/coda.png</iconset>
@@ -1598,7 +1598,7 @@ color: rgb(255, 255, 255);</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_8"/>
             </widget>
-            <widget class="QWidget" name="tab_6">
+            <widget class="QWidget" name="tab_ddoc">
              <attribute name="icon">
               <iconset resource="icon.qrc">
                <normaloff>:/ico/note_accept.ico</normaloff>:/ico/note_accept.ico</iconset>
@@ -1608,7 +1608,7 @@ color: rgb(255, 255, 255);</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_9"/>
             </widget>
-            <widget class="QWidget" name="tab_4">
+            <widget class="QWidget" name="tab_vproject">
              <attribute name="icon">
               <iconset resource="icon.qrc">
                <normaloff>:/ico/stadistics.png</normaloff>:/ico/stadistics.png</iconset>
@@ -1618,7 +1618,7 @@ color: rgb(255, 255, 255);</string>
              </attribute>
              <layout class="QVBoxLayout" name="verticalLayout_10"/>
             </widget>
-            <widget class="QWidget" name="tab_5">
+            <widget class="QWidget" name="tab_regs">
              <attribute name="icon">
               <iconset resource="icon.qrc">
                <normaloff>:/ico/equalizer.ico</normaloff>:/ico/equalizer.ico</iconset>
@@ -1709,7 +1709,7 @@ color: rgb(255, 255, 255);</string>
      <x>0</x>
      <y>0</y>
      <width>1245</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

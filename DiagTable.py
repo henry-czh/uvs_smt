@@ -13,7 +13,7 @@ class DiagTable():
     def __init__(self, smtui):
         super().__init__()
         self.smtui = smtui
-        self.diag_file = smtui.diag_file
+        self.diag_file = os.getenv('DIAG_FILE')
         self.diag_table = smtui.diag_table
         self.textBrowser = smtui.textBrowser
         self.web_view = smtui.web_view
@@ -98,8 +98,12 @@ class DiagTable():
     # 填充diag table的内容
     #********************************************************
     def fillDataForTable(self):
-        self.diag_info = extractDiag.extractDiag(self.diag_file)
-        self.textBrowser.consel("加载diag文件成功!", 'green')
+        if os.path.exists(self.diag_file):
+            self.diag_info = extractDiag.extractDiag(self.diag_file)
+            self.textBrowser.consel("加载diag文件成功!", 'green')
+        else:
+            self.textBrowser.consel("diag文件不存在!", 'red')
+            return
 
         # 设置初始行数和列数
         line_nums = len(self.diag_info)
