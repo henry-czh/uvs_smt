@@ -13,6 +13,7 @@ import subprocess
 import signal
 import time
 import collections
+from configparser import ConfigParser
 
 #PyQt5��������������������PyQt5.QtWidgets������
 #from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
@@ -61,6 +62,10 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.saveDir = os.getenv('CONFIG_SAVE_DIR')
         self.svgfile = os.getenv('SVG_FILE')
         self.diag_file = os.getenv('DIAG_FILE')
+        self.set_file = os.getenv('SETTING_FILE')
+
+        config = ConfigParser()
+        config.read(self.set_file)
 
         self.simulateCMD = collections.OrderedDict()
         self.simulateCMD = {'clean':None,'build':None,'compiler':None,'elab':None,'sim':None,
@@ -71,8 +76,6 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.comboBox_threads.addItems(max_threads_list)
         tools_list = ['xrun', 'vcs']
         self.comboBox_tool.addItems(tools_list)
-        #self.html_file = os.getenv('HTML_FILE')
-        #self.saveDir = os.path.abspath(os.path.join(os.getcwd(), "../config"))
 
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Create Console Window
@@ -139,6 +142,23 @@ class MyMainForm(QMainWindow, Ui_smt):
         #self.main_tabWidget.addTab(self.baidu_view, "搜索引擎")
         #self.baidu_view.setUrl(QUrl("http://www.baidu.com"));
 
+        self.webView_uvs = QWebEngineView(self.tab_2)
+
+        # 从配置文件中获取窗口参数
+        webs_settings = config['Webs']
+        uvs_web = webs_settings.get('uvs_gitlab')
+        print(uvs_web)
+        dcode_web = webs_settings.get('design_code_gitlab')
+        ddoc_web = webs_settings.get('design_doc_gitlab')
+        vproject_web = webs_settings.get('vproject_gitlab')
+        regs_web = webs_settings.get('regs_gitlab')
+
+        self.webView_uvs.setUrl(QUrl(str(uvs_web)));
+        #self.webView_2.setUrl(QUrl(dcode_web));
+        #self.webView_3.setUrl(QUrl(ddoc_web));
+        #self.webView_4.setUrl(QUrl(vproject_web));
+        #self.webView_5.setUrl(QUrl(regs_web));
+
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # 创建一个文件浏览器
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -147,7 +167,7 @@ class MyMainForm(QMainWindow, Ui_smt):
 
         #self.current_path = QDir.currentPath()
         self.current_path = os.getenv('CBS_HOME')
-        self.root_index = self.dir_model.setRootPath(self.current_path)
+        self.dir_model.setRootPath(self.current_path)
         self.treeView_filebrowser.setModel(self.dir_model)
         self.treeView_filebrowser.setRootIndex(self.dir_model.index(self.current_path))
 
@@ -172,9 +192,6 @@ class MyMainForm(QMainWindow, Ui_smt):
         # Create Diag Table
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         self.load_diag_table = DiagTable(self)
-
-        source_path = os.getcwd()
-        self.load_diag_table.expandSubDir(source_path)
 
         # 连接文本框的文本更改事件到过滤函数
         self.lineEdit.textChanged.connect(self.load_diag_table.filterTable)
@@ -229,6 +246,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         self.verdiCB.stateChanged.connect(self.connectCMDCB)
         self.quitCB.stateChanged.connect(self.connectCMDCB)
 
+        self.load_diag_table.refreshFileBrowser()
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     #   xxxxxxxxxx      Functions       xxxxxxxxxxxx
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -238,6 +256,10 @@ class MyMainForm(QMainWindow, Ui_smt):
     def executeCommand(self):
         command = self.lineEdit_cmd.text()
         self.lineEdit_cmd.clear()
+
+        cur_dir = self.dir_model.filePath(self.treeView_filebrowser.currentIndex())
+        command = f"cd {cur_dir}; {command}"
+        self.textBrowser.consel(command, 'green')
 
         self.process.start('bash', ['-c', command])
 

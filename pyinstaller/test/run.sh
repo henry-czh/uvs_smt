@@ -7,6 +7,7 @@ export CBS_HOME=../../
 export TB_HOME=../
 export DEFAULT_MODE=default
 export SMT_HOME=/home/czh/github/uvs_smt
+export SETTING_FILE=./uvs.ini
 
 #python2 ./verif_config/cgi-bin/parseConfig.py $BASE_CONFIG_FILE $USER_CONFIG_FILE
 export XDG_SESSION_TYPE=x11 #/usr/local/bin/your_soft_bin

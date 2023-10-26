@@ -23,6 +23,8 @@ class DiagTable():
         self.dir_model = smtui.dir_model
         self.lineEdit = smtui.lineEdit
 
+        #self.refreshFileBrowser()
+
         self.reloadDiagEvent = False
         self.saveDiagEvent = False
 
@@ -88,6 +90,9 @@ class DiagTable():
         self.diag_table.repaint()
         #self.setSortingEnabled(True)
         self.reloadDiagEvent = False
+
+        source_path = os.getcwd()
+        self.expandSubDir(source_path)
 
     #********************************************************
     # 填充diag table的内容
@@ -320,7 +325,6 @@ class DiagTable():
         self.treeView_filebrowser.collapseAll()
 
         if os.path.exists(subdir):
-            #self.treeView_filebrowser.setRootIndex(self.dir_model.index(source_path))
             ## 获取子目录项（在此示例中为"Sub Directory"）
             sub_directory_index = self.dir_model.index(subdir)
 
@@ -331,7 +335,7 @@ class DiagTable():
                 sub_directory_index = sub_directory_index.parent()
 
             # 逐级展开路径
-            current_index = self.smtui.root_index
+            #current_index = self.smtui.root_index
             for index in path_to_index:
                 current_index = index
                 self.treeView_filebrowser.setExpanded(current_index, True)
@@ -342,8 +346,6 @@ class DiagTable():
         else:
             self.textBrowser.consel("路径不存在: %s" % (subdir), 'red')
 
-        self.treeView_filebrowser.setColumnWidth(0, 300)
-
     ##********************************************************
     ## 过滤table中的项
     ##********************************************************
@@ -353,8 +355,8 @@ class DiagTable():
 
     def refreshFileBrowser(self):
         #source_path = os.getenv('CBS_HOME')
-        source_path = os.getcwd()
 
+        source_path = os.getcwd()
         self.expandSubDir(source_path)
 
 
@@ -375,11 +377,6 @@ class DiagTable():
 
         path = self.diag_table.item(selected_item.row(), 2).text().strip()
         source_path = os.path.join(os.getcwd(), 'simdir', path)
-
-        self.expandSubDir(source_path)
-
-    def refreshFileBrowser(self):
-        source_path = os.getenv('CBS_HOME')
 
         self.expandSubDir(source_path)
 

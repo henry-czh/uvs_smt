@@ -1,5 +1,6 @@
 <RCC>
   <qresource>
+    <file>ico/world-wide-web.png</file>
     <file>ico/trash.png</file>
     <file>ico/stadistics.png</file>
     <file>ico/clock.png</file>

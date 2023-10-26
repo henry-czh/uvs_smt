@@ -70,7 +70,7 @@
        <widget class="QTabWidget" name="broswer_tabWidget">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
+          <horstretch>1</horstretch>
           <verstretch>2</verstretch>
          </sizepolicy>
         </property>
@@ -120,7 +120,7 @@
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <property name="tabsClosable">
          <bool>false</bool>
@@ -156,7 +156,7 @@
            <widget class="QTreeView" name="treeView_filebrowser">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
+              <horstretch>2</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
@@ -256,7 +256,7 @@
        <widget class="QTabWidget" name="main_tabWidget">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>1</horstretch>
+          <horstretch>16</horstretch>
           <verstretch>7</verstretch>
          </sizepolicy>
         </property>
@@ -324,7 +324,7 @@
            <widget class="QScrollArea" name="scrollArea_svg">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
+              <horstretch>8</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
@@ -342,8 +342,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>854</width>
-               <height>572</height>
+               <width>940</width>
+               <height>581</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -1560,6 +1560,77 @@ color: rgb(255, 255, 255);</string>
            </rect>
           </property>
          </widget>
+        </widget>
+        <widget class="QWidget" name="tab">
+         <attribute name="icon">
+          <iconset resource="icon.qrc">
+           <normaloff>:/ico/world-wide-web.png</normaloff>:/ico/world-wide-web.png</iconset>
+         </attribute>
+         <attribute name="title">
+          <string>信息黄页</string>
+         </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QTabWidget" name="tabWidget_webs">
+            <property name="tabPosition">
+             <enum>QTabWidget::East</enum>
+            </property>
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="tab_3">
+             <attribute name="icon">
+              <iconset resource="icon.qrc">
+               <normaloff>:/ico/uvs_white.jpg</normaloff>:/ico/uvs_white.jpg</iconset>
+             </attribute>
+             <attribute name="title">
+              <string>UVS仓库</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_7"/>
+            </widget>
+            <widget class="QWidget" name="tab_2">
+             <attribute name="icon">
+              <iconset resource="icon.qrc">
+               <normaloff>:/ico/coda.png</normaloff>:/ico/coda.png</iconset>
+             </attribute>
+             <attribute name="title">
+              <string>设计代码仓库</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_8"/>
+            </widget>
+            <widget class="QWidget" name="tab_6">
+             <attribute name="icon">
+              <iconset resource="icon.qrc">
+               <normaloff>:/ico/note_accept.ico</normaloff>:/ico/note_accept.ico</iconset>
+             </attribute>
+             <attribute name="title">
+              <string>设计文档仓库</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_9"/>
+            </widget>
+            <widget class="QWidget" name="tab_4">
+             <attribute name="icon">
+              <iconset resource="icon.qrc">
+               <normaloff>:/ico/stadistics.png</normaloff>:/ico/stadistics.png</iconset>
+             </attribute>
+             <attribute name="title">
+              <string>V-Project</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_10"/>
+            </widget>
+            <widget class="QWidget" name="tab_5">
+             <attribute name="icon">
+              <iconset resource="icon.qrc">
+               <normaloff>:/ico/equalizer.ico</normaloff>:/ico/equalizer.ico</iconset>
+             </attribute>
+             <attribute name="title">
+              <string>寄存器描述</string>
+             </attribute>
+             <layout class="QVBoxLayout" name="verticalLayout_11"/>
+            </widget>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
       </widget>
