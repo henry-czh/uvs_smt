@@ -48,6 +48,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         super(MyMainForm, self).__init__(parent)
         self.setupUi(self)
 
+        self.version = '如有疑问, 请联系 chaozhanghu@phytium.com.cn  @Qsmtool 23.09-0003'
         qInitResources()
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # 设置窗口关闭策略为允许通过关闭按钮关闭
@@ -211,7 +212,7 @@ class MyMainForm(QMainWindow, Ui_smt):
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # Set statusbar information
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
-        self.statusbar.showMessage('如有疑问, 请联系 chaozhanghu@phytium.com.cn  @Qsmtool 23.09-0002', 0)
+        self.statusbar.showMessage(self.version, 0)
         self.statusbar.show()
 
         #********************************************************
@@ -406,7 +407,7 @@ class MyMainForm(QMainWindow, Ui_smt):
 
     def openWithGvim(self):
         self.openFileBrowser("Gvim")
-        self.statusbar.showMessage('如有疑问, 请联系 chaozhanghu@phytium.com.cn  @Qsmtool 23.09-0002', 0)
+        self.statusbar.showMessage(self.version, 0)
         self.statusbar.show()
 
     def openWithCode(self):
