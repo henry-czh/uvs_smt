@@ -482,6 +482,7 @@ class DiagTable():
             copy_valid = False
             selected_rows.add(0)
 
+        added_row = []
         for row in selected_rows:
             for col in range(self.diag_table.columnCount()):
                 if col < 2:
@@ -498,6 +499,7 @@ class DiagTable():
                 # 更改单元格的背景颜色
                 new_item.setBackground(QColor("orange"))
                 self.diag_table.setItem(new_row, col, new_item)
+                added_row.append(new_item.text())
         
             # 创建一个QCheckBox并将其放入单元格
             checkbox = QTableWidgetItem()
@@ -513,6 +515,7 @@ class DiagTable():
             statusItem.setIcon(QIcon(pixmap))
             self.diag_table.setItem(new_row, 0, statusItem)
 
+        self.previous_data.append(added_row)
         # 调整列宽以适应内容
         self.diag_table.resizeColumnsToContents()
 

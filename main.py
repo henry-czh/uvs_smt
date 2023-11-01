@@ -364,6 +364,7 @@ class MyMainForm(QMainWindow, Ui_smt):
             if os.path.exists(QDir.homePath()+'/.current_setting.cbs'):
                 os.system('rm %s' % (QDir.homePath()+'/.current_setting.cbs'))
             event.accept()  # 允许关闭窗口
+            self.stopSimuateFunc()
         else:
             event.ignore()  # 取消关闭窗口
 

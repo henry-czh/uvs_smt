@@ -10,3 +10,5 @@ testcase3 path=hello_world3 config=111 scp=3 comp_argvs='+define+SRAM_SIM' run_a
 
 testcase5 path=hello_world2 config=111 scp=4 comp_argvs='+define+SRAM_SIM' run_argvs='gui=1' run_boards='' argv='+define+TIMEOUT=5000' 
 
+testcase1_new path=hello_world2 config=111 scp=4 comp_argvs='+define+SRAM_SIM' run_argvs='gui=1' run_boards='' argv='+define+TIMEOUT=5000' 
+
