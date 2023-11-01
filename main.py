@@ -68,8 +68,8 @@ class MyMainForm(QMainWindow, Ui_smt):
         cmn_setting_file = os.path.join(CBS_HOME,'testbench/uvs.ini')
         if not os.path.exists(cmn_setting_file):
             print('uvs.ini文件缺失!')
-        cmn_config = ConfigParser()
-        cmn_config.read(cmn_setting_file)
+        self.cmn_config = ConfigParser()
+        self.cmn_config.read(cmn_setting_file)
 
         self.simulateCMD = collections.OrderedDict()
         self.simulateCMD = {'clean':None,'build':None,'compiler':None,'elab':None,'sim':None,
@@ -146,30 +146,6 @@ class MyMainForm(QMainWindow, Ui_smt):
         #self.main_tabWidget.addTab(self.baidu_view, "搜索引擎")
         #self.baidu_view.setUrl(QUrl("http://www.baidu.com"));
 
-        self.webView_uvs        = QWebEngineView(self.tab_uvs)
-        self.webView_dcode      = QWebEngineView(self.tab_dcode)
-        self.webView_ddoc       = QWebEngineView(self.tab_ddoc)
-        self.webView_vproject   = QWebEngineView(self.tab_vproject)
-        self.webView_regs       = QWebEngineView(self.tab_regs)
-
-        # 从配置文件中获取窗口参数
-        if cmn_config.has_section('Webs'):
-            webs_settings = cmn_config['Webs']
-            uvs_web = webs_settings.get('uvs_gitlab')
-            dcode_web = webs_settings.get('design_code_gitlab')
-            ddoc_web = webs_settings.get('design_doc_gitlab')
-            vproject_web = webs_settings.get('vproject_gitlab')
-            regs_web = webs_settings.get('regs_gitlab')
-
-            self.webView_uvs.setUrl(QUrl(uvs_web));
-            self.verticalLayout_7.addWidget(self.webView_uvs)
-            self.webView_uvs.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-
-            self.webView_dcode.setUrl(QUrl(dcode_web))
-            self.webView_ddoc.setUrl(QUrl(ddoc_web))
-            self.webView_vproject.setUrl(QUrl(vproject_web))
-            self.webView_regs.setUrl(QUrl(regs_web))
-
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
         # 创建一个文件浏览器
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -239,6 +215,16 @@ class MyMainForm(QMainWindow, Ui_smt):
         # action "refresh file browser"
         self.actionreload.triggered.connect(self.load_diag_table.refreshFileBrowser)
 
+        self.actionUVSWeb.triggered.connect(self.loadWeb)
+
+        self.actionDcodeWeb.triggered.connect(self.loadWeb)
+
+        self.actionDoc.triggered.connect(self.loadWeb)
+
+        self.actionvproject.triggered.connect(self.loadWeb)
+
+        self.actionreg.triggered.connect(self.loadWeb)
+
         #********************************************************
         # connect checkboxs and function 
         #********************************************************
@@ -261,6 +247,34 @@ class MyMainForm(QMainWindow, Ui_smt):
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     #   xxxxxxxxxx      Functions       xxxxxxxxxxxx
     #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    def loadWeb(self):
+        # 获取发送信号的 QAction
+        sender_action = self.sender()
+
+        if self.main_tabWidget.count() == 4:
+            self.main_tabWidget.removeTab(3)
+
+        webView = QWebEngineView()
+        self.main_tabWidget.addTab(webView, f"{sender_action.text()}网页")
+        self.main_tabWidget.setCurrentIndex(3)
+
+        # 从配置文件中获取窗口参数
+        if self.cmn_config.has_section('Webs'):
+            webs_settings = self.cmn_config['Webs']
+            # 区分不同的 QAction
+            if sender_action.text() == "uvs":
+                url = webs_settings.get('uvs_gitlab')
+            elif sender_action.text() == "RTL":
+                url = webs_settings.get('design_code_gitlab')
+            elif sender_action.text() == "Doc":
+                url = webs_settings.get('design_doc_gitlab')
+            elif sender_action.text() == "vpj":
+                url = webs_settings.get('vproject_gitlab')
+            elif sender_action.text() == "reg":
+                url = webs_settings.get('regs_gitlab')
+
+            webView.setUrl(QUrl(url))
+
     #********************************************************
     # 运行shell命令
     #********************************************************
