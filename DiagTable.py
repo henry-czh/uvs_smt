@@ -98,9 +98,20 @@ class DiagTable():
     # 填充diag table的内容
     #********************************************************
     def fillDataForTable(self):
-        if os.path.exists(self.diag_file):
-            self.diag_info = extractDiag.extractDiag(self.diag_file)
-            self.textBrowser.consel("加载diag文件成功!", 'green')
+        diag_path = os.path.abspath(os.path.dirname(self.diag_file))
+        # 获取目录中的文件列表
+        file_list = os.listdir(diag_path)
+
+        # 遍历文件列表，检查是否存在以 .diag 后缀的文件
+        diag_files = [file for file in file_list if file.endswith(".diag")]
+
+        # 判断是否存在 .diag 后缀的文件
+        if diag_files and os.path.exists(os.path.join(diag_path, diag_files[0])):
+            if len(diag_files)>1:
+                self.textBrowser.consel(f"多个diag文件出现在 {diag_path}，只允许有一个.diag文件!", 'red')
+                return
+
+            self.diag_info = extractDiag.extractDiag(os.path.join(diag_path, diag_files[0]))
         else:
             self.textBrowser.consel("diag文件不存在!", 'red')
             return

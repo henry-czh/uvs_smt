@@ -24,17 +24,18 @@ class WorkerThread(QThread):
     def run(self):
         try:
             # bug记录：去除stdout，大量的stdout会塞满PIPE，导致子进程卡死
-            self.process = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            #self.process = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            self.process = subprocess.Popen(self.command, shell=True, stderr=subprocess.PIPE)
 
             self.task =  f"任务 {self.command} 子进程pid {self.process.pid}"
             self.finished.emit(f"[Info] {self.task} 开始执行.")  # 发射任务完成信号
 
-            while True:
-                output = self.process.stdout.readline()
-                if output.decode('utf-8') == '' and self.process.poll() is not None:
-                    break
-                if output.decode('utf-8'):
-                    self.outputReceived.emit(output.decode('utf-8'))
+            #while True:
+            #    output = self.process.stdout.readline()
+            #    if output.decode('utf-8') == '' and self.process.poll() is not None:
+            #        break
+            #    if output.decode('utf-8'):
+            #        self.outputReceived.emit(output.decode('utf-8'))
 
             # 等待子进程完成
             return_code = self.process.wait()  # 等待外部进程执行完成
