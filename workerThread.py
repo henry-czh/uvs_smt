@@ -123,6 +123,10 @@ class MutiWorkThread():
         self.consol.consel(f"threads:{len(self.threads)}\n",'black')
         # 定义要执行的命令列表，每个元素是一个命令字符串
         self.commands = self.collectCMDs()
+
+        if (len(self.commands) == 0):
+            self.consol.consel(f"No task been selected.\n",'red')
+            return
         
         # 启动子进程并存储 Popen 对象
         for item in self.commands:
